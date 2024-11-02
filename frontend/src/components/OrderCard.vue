@@ -4,7 +4,9 @@
     >
         <div class="flex flex-col">
             <div class="flex items-center">
-                <span class="text-3xl pr-2">Order #{{ order.id }}</span>
+                <span class="text-3xl pr-2"
+                    >Order #{{ order.id.slice(0, 4) }}</span
+                >
                 <span
                     class="align-text-bottom text-lg"
                     :style="{
@@ -28,7 +30,10 @@
                 >By {{ props.order.user.username }}</span
             >
             <span class="text-md text-gray-500 ml-1"
-                >Time: {{ order.createdAt }}</span
+                >Date: {{ order.createdAt.slice(0, 10) }}</span
+            >
+            <span class="text-md text-gray-500 ml-1"
+                >Time: {{ order.createdAt.slice(11, 19) }}</span
             >
             <span class="py-2 pl-1">
                 <button

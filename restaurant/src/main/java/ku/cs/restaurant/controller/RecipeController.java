@@ -33,7 +33,7 @@ public class RecipeController {
     }
 
     // Get recipe by ID using request body
-    @PostMapping("/recipe/getById")
+    @GetMapping("/recipe/id")
     public ResponseEntity<ApiResponse<Recipe>> getRecipeById(@RequestBody RecipeKey id) {
         try {
             Optional<Recipe> recipe = recipeService.getRecipeById(id);

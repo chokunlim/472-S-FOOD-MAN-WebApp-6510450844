@@ -18,7 +18,7 @@ public class ScheduledTasks {
         this.orderRepository = orderRepository;
     }
 
-    @Scheduled(fixedRate = 3600000)
+    @Scheduled(fixedRate = 360000)
     @Transactional
     // if order did not pay for 24 hours, it'll get cancelled
     public void updateOrderStatus() {

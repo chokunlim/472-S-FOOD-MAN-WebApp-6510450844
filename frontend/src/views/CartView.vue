@@ -52,7 +52,7 @@
                 </li>
             </ul>
             <div class="mt-4 font-bold">
-                <h2>Total: {{ total }} ฿</h2>
+                <h2>Total: {{ total + total * 0.07 }} ฿</h2>
             </div>
         </div>
     </main>
