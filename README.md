@@ -54,61 +54,77 @@ sk_test_51Q6VTPBb2nJBY3WlwqNj5Uu2qphozXdNlD8AREPgcMYoFmDlMV7lNmgqBSjOxJKM7mWZ6uv
 
 # Features
 
-1. <b>Order Management</b>
-   Allows for creating, updating, and tracking customer orders.
-   Integrates order items with recipes and ingredients to update stock levels automatically.
-   Supports marking orders as successful or cancelled.
+# รายงานอธิบายเส้น API
 
-   - `GET /order - Retrieve a list of orders.`
+## Authentication APIs
 
-   - `POST /order - Create a new order.`
-   - `PATCH /order/:id - Update the status of an order by ID.`
+1. **POST /auth/signin**  
+   ใช้สำหรับเข้าสู่ระบบ โดยผู้ใช้ต้องระบุข้อมูลเข้าสู่ระบบ เช่น ชื่อผู้ใช้และรหัสผ่าน ระบบจะตอบกลับด้วยโทเค็น (token) หากการเข้าสู่ระบบสำเร็จ
 
-2. <b>Receipt Generation</b>
-   Automatically generates receipts for completed orders.
-   Includes details like itemized list, prices, and total cost.
-   Can be printed or saved for accounting purposes.
+2. **POST /auth/signup**  
+   ใช้สำหรับลงทะเบียนผู้ใช้ใหม่ โดยผู้ใช้ต้องระบุข้อมูลการลงทะเบียน เช่น ชื่อผู้ใช้ รหัสผ่าน และอีเมล ระบบจะสร้างบัญชีผู้ใช้ใหม่และตอบกลับด้วยข้อมูลผู้ใช้หรือโทเค็น
 
-   - `GET /receipt - Fetch receipts for orders.`
-   - `POST /receipt - Create a new receipt for an order.`
+3. **POST /auth**  
+   ใช้สำหรับตรวจสอบความถูกต้องของโทเค็นที่ได้รับมา เพื่อให้แน่ใจว่าผู้ใช้ยังคงเข้าสู่ระบบอยู่และสามารถใช้งาน API ได้อย่างปลอดภัย
 
-3. <b>Recipe Management</b>
-   Define and manage recipes for each menu item.
-   Associates recipes with ingredients to ensure proper stock management.
-   Allows customization of ingredient quantities for flexible recipe variations.
+---
 
-   - `GET /recipe - Retrieve a list of recipes.`
-   - `GET /recipe/:id - Retrieve recipe by id`
-   - `PATCH /recipe/:id - Update an existing recipe by ID.`
+## Financial APIs
 
-4. <b>Ingredient Management</b>
-   Manages the inventory of ingredients, tracking available quantities and expiration dates.
-   Enables adding, editing, and updating ingredient information.
-   Automatically reduces ingredient quantities based on order fulfillment.
+1. **GET /financial**  
+   ใช้สำหรับดึงข้อมูลทางการเงินทั้งหมดของผู้ใช้ ข้อมูลนี้อาจประกอบด้วยยอดคงเหลือทางการเงิน ยอดค้างชำระ หรือยอดการใช้จ่ายที่บันทึกไว้
 
-   - `GET /ingredient - Retrieve a list of ingredients.`
-   - `POST /ingredient - Add a new ingredient to inventory.`
-   - `PATCH /ingredient/:id - Update quantity or status of an ingredient.`
+---
 
-5. <b>Food Menu Management</b>
-   Manages the list of available food items and their prices.
-   Provides options for enabling or disabling items based on stock or seasonal availability.
-   Links food items to specific recipes and ingredients for streamlined ordering.
+## Food APIs
 
-   - `GET /food - Retrieve the list of food items on the menu.`
-   - `POST /food - Add a new item to the menu.`
-   - `PATCH /food/:id - Update a menu item’s details.`
+1. **GET /foods**  
+   ใช้สำหรับดึงข้อมูลเมนูอาหารทั้งหมดในระบบ เพื่อแสดงข้อมูลรายการอาหารหรือวัตถุดิบที่ใช้ในการประกอบอาหาร
 
-6. <b>User Authentication</b>
-   Secure user sign-up and sign-in functionality with role-based access control.
-   Admin access to manage inventory, orders, and menu items.
-   General users have access to view menu items and place orders.
+2. **POST /foods**  
+   ใช้สำหรับสร้างรายการอาหารใหม่หรือสูตรอาหาร โดยการเพิ่มข้อมูลอาหารและสูตรการทำอาหารเข้าไปในระบบ
 
-   - `GET /user/jwt - Get current user token`
-   - `POST /auth/signup - Register a new user.`
-   - `POST /auth/signin - Log in to an existing account.`
+---
 
-7. <b>Dashboard</b>
-   Provides an overview of financial performance, including income, expenses, and net totals by date. Useful for tracking daily business metrics and for financial planning.
+## Ingredient APIs
 
-   - `GET /financial - Retrieve financial data, including income, expense, and total summaries by date.`
+1. **GET /ingredient**  
+   ใช้สำหรับดึงข้อมูลวัตถุดิบทั้งหมดในระบบ เพื่อให้ทราบถึงวัตถุดิบที่มีอยู่
+
+2. **POST /ingredient**  
+   ใช้สำหรับเพิ่มวัตถุดิบใหม่ลงในระบบ โดยระบุข้อมูลที่จำเป็น เช่น ชื่อวัตถุดิบ ปริมาณ และหน่วยวัด
+
+3. **PATCH /ingredient**  
+   ใช้สำหรับอัปเดตปริมาณวัตถุดิบที่มีอยู่ในระบบ โดยสามารถปรับจำนวนวัตถุดิบที่มีอยู่ได้ตามการใช้งานจริง
+
+---
+
+## Order APIs
+
+1. **GET /order**  
+   ใช้สำหรับดึงข้อมูลการสั่งซื้อทั้งหมดที่มีอยู่ในระบบ
+
+2. **POST /order**  
+   ใช้สำหรับสร้างคำสั่งซื้อใหม่ โดยระบุรายละเอียดการสั่งซื้อ เช่น รายการอาหารที่ต้องการสั่งซื้อและข้อมูลผู้สั่งซื้อ
+
+3. **PATCH /order**  
+   ใช้สำหรับอัปเดตสถานะของคำสั่งซื้อ เช่น การยืนยันคำสั่งซื้อ การจัดส่ง หรือการเสร็จสิ้นคำสั่งซื้อ
+
+4. **POST /order/ingredient/{orderId}**  
+   ใช้สำหรับอัปเดตปริมาณวัตถุดิบที่ถูกใช้ในคำสั่งซื้อนั้น ๆ โดยระบุ `orderId` เพื่อแก้ไขวัตถุดิบที่ถูกใช้ในการสั่งซื้อ
+
+5. **GET /order/{id}/receipt**  
+   ใช้สำหรับดึงใบเสร็จของคำสั่งซื้อโดยระบุ `orderId` เพื่อให้ผู้ใช้สามารถดูข้อมูลใบเสร็จได้
+
+6. **GET /order/{id}/user**  
+   ใช้สำหรับดึงข้อมูลผู้ใช้ที่ทำคำสั่งซื้อนั้น ๆ โดยระบุ `orderId` เพื่อให้ทราบว่าใครเป็นผู้สั่งซื้อ
+
+7. **GET /order/id/food**  
+   ใช้สำหรับดึงรายการอาหารที่ถูกใช้ในการสั่งซื้อ โดยระบุ `orderId` เพื่อแสดงรายละเอียดอาหารที่สั่งซื้อในคำสั่งนั้น ๆ
+
+---
+
+## User APIs
+
+1. **GET /user/jwt**  
+   ใช้สำหรับดึงข้อมูลผู้ใช้โดยอ้างอิงจากโทเค็น JWT ที่เก็บไว้ใน local storage

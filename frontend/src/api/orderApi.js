@@ -7,11 +7,11 @@ const orderApi = {
         })
     },
 
-    getOrderUserById(orderId) {
-        return apiClient.get(`/order/${orderId}/user`, {
-            headers: { 'Content-Type': 'application/json' },
-        })
-    },
+    // getOrderUserById(orderId) {
+    //     return apiClient.get(`/order/${orderId}/user`, {
+    //         headers: { 'Content-Type': 'application/json' },
+    //     })
+    // },
 
     createOrder(orderData) {
         return apiClient.post('/order', orderData, {
