@@ -9,7 +9,7 @@
 ## Download Project
 
 ```
-git clone https://github.com/kirby-cs-org/restaurant.git
+git clone https://github.com/kirby-cs-org/SE.git
 ```
 
 ## Frontend
