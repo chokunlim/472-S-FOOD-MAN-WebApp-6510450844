@@ -42,6 +42,7 @@ npm run build
 1. Database Name = sa2
 2. Backend Port = 8088
 3. Secret Token JWT (for test)
+4. For admin, manually change role in database user_role = 'ADMIN'
 
 ```sh
 ffc0d02ab13cf1b58ac77b6165b17d6654837e8c845e197774754a0efd375560
