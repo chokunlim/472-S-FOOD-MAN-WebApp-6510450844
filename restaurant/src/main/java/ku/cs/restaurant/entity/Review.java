@@ -1,9 +1,12 @@
 package ku.cs.restaurant.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Data
 @Entity
 public class Review {
     @Id
@@ -11,10 +14,13 @@ public class Review {
     @Column(unique = true, nullable = false, name = "review_id")
     private UUID id;
 
+    @Column(name = "rating")
     private int rating;
 
+    @Column(name = "comment")
     private String comment;
 
+    @Column(name = "review_date")
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @ManyToOne
