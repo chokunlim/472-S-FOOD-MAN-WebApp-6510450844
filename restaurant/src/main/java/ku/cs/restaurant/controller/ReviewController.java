@@ -20,7 +20,6 @@ public class ReviewController {
     public ResponseEntity<Review> submitReview(@RequestBody ReviewRequest reviewRequest) {
         Review review = reviewService.submitReview(
                 reviewRequest.getOrderId(),
-                reviewRequest.getCustomerId(),
                 reviewRequest.getRating(),
                 reviewRequest.getComment()
         );

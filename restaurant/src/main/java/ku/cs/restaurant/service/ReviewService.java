@@ -15,13 +15,9 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final OrderRepository orderRepository;
 
-    public Review submitReview(UUID orderId, UUID customerId, int rating, String comment) {
+    public Review submitReview(UUID orderId, int rating, String comment) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
-
-        if (!order.getUser().getId().equals(customerId) || !order.getStatus().equals("DELIVERED")) {
-            throw new RuntimeException("Review can only be submitted for completed orders.");
-        }
 
         Review review = new Review();
         review.setOrder(order);

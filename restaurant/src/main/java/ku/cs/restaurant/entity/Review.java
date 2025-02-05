@@ -2,6 +2,8 @@ package ku.cs.restaurant.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -11,6 +13,7 @@ import java.util.UUID;
 public class Review {
     @Id
     @GeneratedValue
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column(unique = true, nullable = false, name = "review_id")
     private UUID id;
 

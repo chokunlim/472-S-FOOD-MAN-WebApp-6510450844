@@ -12,6 +12,7 @@ import CancelView from '@/views/CancelView.vue'
 import AddIngredientsView from '@/views/AddIngredientsView.vue'
 import AddFoodView from '@/views/AddFoodView.vue'
 import authApi from '@/api/authApi'
+import ReviewView from '@/views/ReviewView.vue'
 
 const routes = [
     {
@@ -73,6 +74,11 @@ const routes = [
         path: '/addfood',
         name: 'addfood',
         component: AddFoodView,
+    },
+    {
+        path: '/order/:id/review',
+        name: 'ReviewView',
+        component: ReviewView,
     },
 ]
 

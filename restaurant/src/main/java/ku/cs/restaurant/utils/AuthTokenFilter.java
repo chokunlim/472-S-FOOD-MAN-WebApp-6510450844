@@ -35,37 +35,32 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         String jwt = parseJwt(request);
 
-        // allow signin signup auth
         if (request.getRequestURI().equals("/auth/signin") || request.getRequestURI().equals("/auth/signup") || request.getRequestURI().equals("/auth") || request.getRequestURI().contains("/images")) {
-            filterChain.doFilter(request, response); // Proceed without JWT validation
+            filterChain.doFilter(request, response);
             return;
         }
 
-        // ตรวจสอบว่า JWT มีอยู่และถูกต้องหรือไม่
         if (jwt == null || !jwtUtils.validateJwtToken(jwt)) {
             tokenLogger.warn("JWT is missing or invalid.");
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-            return; // หาก JWT ไม่มีหรือไม่ถูกต้อง ให้หยุดการประมวลผล
+            return;
         }
 
         try {
             String username = jwtUtils.getUserNameFromJwtToken(jwt);
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-            // ดึงบทบาทจาก JWT claims
             List<String> roles = jwtUtils.getRolesFromToken(jwt);
             boolean hasRequiredRole = false;
 
             tokenLogger.info("User {} has roles: {}", username, roles);
             System.out.println("User " + username + " has roles: " + roles);
 
-            // ตรวจสอบ URI ของการร้องขอ
             String requestUri = request.getRequestURI();
 
-            // กำหนดบทบาทที่จำเป็นตาม URI ที่ร้องขอ
-            if (requestUri.matches("/foods|/order|/order_line|/recipe|/receipt|/user|/financial")) {
+            if (requestUri.matches("/foods|/order|/order_line|/recipe|/receipt|/user|/financial|/reviews")) {
                 hasRequiredRole = roles.contains("CUSTOMER") || roles.contains("ADMIN");
-            } else if (requestUri.matches("/foods/.*|/order/.*|/order_line/.*|/recipe/.*|/receipt.*|/user/.*")) {
+            } else if (requestUri.matches("/foods/.*|/order/.*|/order_line/.*|/recipe/.*|/receipt.*|/user/.*|/financial/.*|/reviews/.*")) {
                 hasRequiredRole = roles.contains("CUSTOMER") || roles.contains("ADMIN");
             } else if (requestUri.equals("/ingredient")) {
                 hasRequiredRole = roles.contains("ADMIN");
