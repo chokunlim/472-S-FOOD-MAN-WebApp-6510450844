@@ -13,6 +13,7 @@ import AddIngredientsView from '@/views/AddIngredientsView.vue'
 import AddFoodView from '@/views/AddFoodView.vue'
 import authApi from '@/api/authApi'
 import ReviewView from '@/views/ReviewView.vue'
+import ReviewListView from '@/views/ReviewListView.vue'
 
 const routes = [
     {
@@ -80,6 +81,11 @@ const routes = [
         name: 'ReviewView',
         component: ReviewView,
     },
+    {
+        path: '/reviewlistview',
+        name: 'ReviewListView',
+        component: ReviewListView,
+    }
 ]
 
 const router = createRouter({
