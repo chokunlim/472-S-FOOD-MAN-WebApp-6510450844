@@ -58,6 +58,14 @@
                 >
                     View Details
                 </button>
+                <botton
+                    v-if="order.status === 'COMPLETE'"
+                    class="inline-block w-52 px-10 py-2 mt-2 mr-10 rounded-lg bg-yellow-300"
+                    style="background-color: #ff7f50; color: #ffffff"
+                    @click="reviewOrder(order.id)"
+                >
+                    Review Order
+                </botton>
             </span>
         </div>
         <div class="flex flex-col items-end">
@@ -108,4 +116,9 @@ const payAgain = (order) => {
     window.location.href = order.paymentLink
     // console.log('Redirecting to payment link:', order.paymentLink)
 }
+
+const reviewOrder = (id) => {
+    window.location.href = `/order/:id/review`
+}
+
 </script>
