@@ -63,7 +63,7 @@ const login = async () => {
         if (token) {
             localStorage.setItem('token', token) // Save token in localStorage
 
-            router.push('/food') // Redirect to food page
+            router.push('/promotions') // Redirect to Promotions page
         }
     } catch (error) {
         console.error('Login failed:', error.response?.data || error.message)
