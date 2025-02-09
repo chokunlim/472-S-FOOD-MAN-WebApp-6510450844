@@ -34,6 +34,10 @@ public class Food {
 
     @OneToMany(mappedBy = "food")
     @JsonIgnore
-    private List<Recipe> recipes = new ArrayList<>();
+    private List<Recipe> recipes;
+
+    @OneToMany(mappedBy = "food")
+    @JsonIgnore
+    private List<PromotionFood> promotionFoods;
 }
 

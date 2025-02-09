@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class FoodService {
+public class    FoodService {
     private final FoodRepository foodRepository;
     private final IngredientService ingredientService;
 
