@@ -2,9 +2,16 @@ import apiClient from './index'
 
 const reviewApi = {
 
-    createReview(reviewData) {
-        return apiClient.post('/reviews/submit', reviewData) 
+    getReviews() {
+        return apiClient.get('/review', {
+            headers: { 'Content-Type': 'application/json' },
+        })
     },
+
+    createReview(reviewData) {
+        return apiClient.post('/review/submit', reviewData) 
+    },
+
 }
 
 export default reviewApi

@@ -65,8 +65,8 @@ const menuItems = [
     { label: 'Menu', icon: 'bars', path: '/food' },
     { label: 'Order', icon: 'book', path: '/order' },
     { label: 'Ingredient', icon: 'book', path: '/ingredient', role: 'ADMIN' },
+    { label: 'Review', icon: 'book', path: '/reviewlistview', role: 'ADMIN' },
     { label: 'Dashboard', icon: 'chart-line', path: '/dashboard', role: 'ADMIN' },
-    { label: 'Review', icon: '', path: '/reviewlistview', role: 'ADMIN' },
 ]
 
 // Filter menu items based on the user's role

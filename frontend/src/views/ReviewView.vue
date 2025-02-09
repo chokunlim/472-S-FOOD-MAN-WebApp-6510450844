@@ -42,6 +42,12 @@ export default {
                 const { data: customer_res } = await userApi.getUserByJwt();
                 review.customerId = customer_res.id;
 
+
+                console.log(review.orderId);
+                console.log(review.rating);
+                console.log(review.comment);
+
+
                 const { data: review_res } = await reviewApi.createReview({
                     orderId: review.orderId,
                     rating: review.rating,

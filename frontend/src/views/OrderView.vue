@@ -23,11 +23,6 @@ const fetchOrders = async () => {
         role.value = userResponse.data.role
         const loggedInUserId = user.value.id
 
-        console.log(orderResponse)
-        console.log('---')
-        console.log(userResponse)
-        console.log(loggedInUserId)
-
         // Filter orders based on user role
         orders.value =
             role.value === 'ADMIN'

@@ -7,6 +7,7 @@ import ku.cs.restaurant.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -25,5 +26,9 @@ public class ReviewService {
         review.setRating(rating);
         review.setComment(comment);
         return reviewRepository.save(review);
+    }
+
+    public List<Review> getReviews() {
+        return reviewRepository.findAll();
     }
 }
