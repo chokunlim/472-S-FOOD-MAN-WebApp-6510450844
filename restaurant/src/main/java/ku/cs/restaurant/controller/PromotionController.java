@@ -1,78 +1,74 @@
 package ku.cs.restaurant.controller;
+
+import ku.cs.restaurant.dto.ApiResponse;
 import ku.cs.restaurant.dto.promotion.PromotionCreateRequest;
-import ku.cs.restaurant.dto.promotion.PromotionResponseDTO;
 import ku.cs.restaurant.entity.Promotion;
+import ku.cs.restaurant.service.ImageService;
 import ku.cs.restaurant.service.PromotionService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/promotions")
-@RequiredArgsConstructor
 public class PromotionController {
-
     private final PromotionService promotionService;
+    private final ImageService imageService;
 
-    // Method to convert Entity to DTO
-    private PromotionResponseDTO mapToDTO(Promotion promotion) {
-        PromotionResponseDTO dto = new PromotionResponseDTO();
-        dto.setId(promotion.getId());
-        dto.setName(promotion.getName());
-        dto.setDescription(promotion.getDescription());
-        dto.setType(promotion.getType());
-        dto.setDiscountValue(promotion.getDiscountValue());
-        dto.setStartDate(promotion.getStartDate());
-        dto.setEndDate(promotion.getEndDate());
-        return dto;
+    public PromotionController(PromotionService promotionService, ImageService imageService) {
+        this.promotionService = promotionService;
+        this.imageService = imageService;
+    }
+
+    // Create a new promotion
+    @PostMapping("/promotions")
+    public ResponseEntity<ApiResponse<Promotion>> createPromotion(@RequestPart("promotion") PromotionCreateRequest request,
+                                                                  @RequestPart("image") MultipartFile image) {
+        try {
+            String imagePath = imageService.saveImage("src/main/resources/images/promotions", image);
+            Promotion createdPromotion = promotionService.createPromotion(request, imagePath);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new ApiResponse<>(true, "Promotion created successfully.", createdPromotion));
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(false, "Failed to save image: " + e.getMessage(), null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse<>(false, "An error occurred: " + e.getMessage(), null));
+        }
     }
 
     // Get all promotions
-    @GetMapping
-    public List<PromotionResponseDTO> getAllPromotions() {
+    @GetMapping("/promotions")
+    public ResponseEntity<ApiResponse<List<Promotion>>> getAllPromotions() {
         List<Promotion> promotions = promotionService.getAllPromotions();
-        return promotions.stream()
-                .map(this::mapToDTO) // แปลงจาก Entity เป็น DTO
-                .toList();
+        return ResponseEntity.ok(new ApiResponse<>(true, "Promotions retrieved successfully.", promotions));
     }
 
     // Get promotion by ID
-    @GetMapping("/{id}")
-    public ResponseEntity<PromotionResponseDTO> getPromotionById(@PathVariable UUID id) {
-        Optional<Promotion> promotion = promotionService.getPromotionById(id);
-        return promotion.map(p -> ResponseEntity.ok(mapToDTO(p))) // แปลง Entity เป็น DTO
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    @GetMapping("/promotions/{id}")
+    public ResponseEntity<ApiResponse<Promotion>> getPromotionById(@PathVariable UUID id) {
+        return promotionService.getPromotionById(id)
+                .map(promotion -> ResponseEntity.ok(new ApiResponse<>(true, "Promotion retrieved successfully.", promotion)))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ApiResponse<>(false, "Promotion not found.", null)));
     }
 
-    // Create new promotion
-    @PostMapping
-    public ResponseEntity<PromotionResponseDTO> createPromotion(@RequestBody PromotionCreateRequest promotionCreateRequest) {
-        // แปลงจาก DTO เป็น Entity
-        // จัดการอาหารที่เกี่ยวข้อง
-        // promotion.setFoods( ... ); // หากต้องการเชื่อมโยงอาหารกับโปรโมชั่น
-
-        // สร้างโปรโมชั่นใหม่
-        Promotion createdPromotion = promotionService.createPromotion(promotionCreateRequest);
-
-        // แปลงจาก Entity เป็น DTO และส่งกลับ
-        PromotionResponseDTO responseDTO = mapToDTO(createdPromotion);
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
-    }
-
-    // Delete promotion by ID
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePromotion(@PathVariable UUID id) {
-        Optional<Promotion> promotion = promotionService.getPromotionById(id);
-        if (promotion.isPresent()) {
+    // Delete a promotion
+    @DeleteMapping("/promotions")
+    public ResponseEntity<ApiResponse<Void>> deletePromotion(@RequestBody UUID id) {
+        try {
             promotionService.deletePromotion(id);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                    .body(new ApiResponse<>(true, "Promotion deleted successfully.", null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse<>(false, "Promotion not found.", null));
         }
     }
 }

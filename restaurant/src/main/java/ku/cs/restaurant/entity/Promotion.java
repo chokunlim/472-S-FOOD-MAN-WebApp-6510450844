@@ -41,4 +41,6 @@ public class Promotion {
     @JsonIgnore
     private List<PromotionFood> promotionFoods;
 
+    @Column(name = "p_image")
+    private String imagePath;
 }
