@@ -12,6 +12,7 @@ import CancelView from '@/views/CancelView.vue'
 import AddIngredientsView from '@/views/AddIngredientsView.vue'
 import AddFoodView from '@/views/AddFoodView.vue'
 import PromotionsView from'@/views/PromotionsView.vue'
+import AddPromotion from '@/views/AddPromotion.vue'
 import authApi from '@/api/authApi'
 
 const routes = [
@@ -80,6 +81,12 @@ const routes = [
         name: 'promotions',
         component: PromotionsView,
     },
+    {
+        path: '/addpromotion',
+        name: 'addpromotion',
+        component: AddPromotion,
+    },
+    
 ]
 
 const router = createRouter({

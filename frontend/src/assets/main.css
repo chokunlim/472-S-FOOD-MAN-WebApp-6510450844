@@ -160,6 +160,11 @@
     gap: 24px 4px;
     grid-template-columns: repeat(auto-fill, minmax(16rem, 16.5rem));
 }
+.promotions-grid {
+    display: grid;
+    gap: 24px 4px;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 16.5rem));
+}
 
 .ingredients-grid {
     display: grid;

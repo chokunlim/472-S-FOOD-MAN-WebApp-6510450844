@@ -7,9 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -21,7 +19,7 @@ import java.util.UUID;
 public class PromotionService {
     private static final Logger logger = LoggerFactory.getLogger(PromotionService.class);
     private final PromotionRepository promotionRepository;
-    private final ImageService imageService;
+    private final PromotionFoodService promotionFoodService;
 
     public List<Promotion> getAllPromotions() {
         return promotionRepository.findAll();
@@ -41,10 +39,19 @@ public class PromotionService {
         promotion.setEndDate(request.getEndDate());
         promotion.setImagePath(imagePath);
 
-        return promotionRepository.save(promotion);
+        Promotion savedPromotion = promotionRepository.save(promotion);
+
+        // 🔥 เพิ่มอาหารลงในโปรโมชั่นทันที
+        if (request.getFoodIds() != null && !request.getFoodIds().isEmpty()) {
+            for (UUID foodId : request.getFoodIds()) {
+                promotionFoodService.addFoodToPromotion(savedPromotion.getId(), foodId);
+            }
+        }
+
+        return savedPromotion;
     }
 
-    public void deletePromotion(UUID id) {
+    public boolean deletePromotion(UUID id) {
         Optional<Promotion> promotionOpt = promotionRepository.findById(id);
         if (promotionOpt.isPresent()) {
             Promotion promotion = promotionOpt.get();
@@ -53,7 +60,7 @@ public class PromotionService {
                 try {
                     Files.deleteIfExists(Paths.get(promotion.getImagePath()));
                     logger.info("Deleted image: {}", promotion.getImagePath());
-                } catch (IOException e) {
+                } catch (Exception e) {
                     logger.error("Failed to delete image: {}", promotion.getImagePath(), e);
                 }
             }
@@ -62,5 +69,6 @@ public class PromotionService {
         } else {
             logger.warn("Promotion ID {} not found, skipping deletion.", id);
         }
+        return false;
     }
 }

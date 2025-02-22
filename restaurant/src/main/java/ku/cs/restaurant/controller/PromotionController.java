@@ -2,8 +2,10 @@ package ku.cs.restaurant.controller;
 
 import ku.cs.restaurant.dto.ApiResponse;
 import ku.cs.restaurant.dto.promotion.PromotionCreateRequest;
+import ku.cs.restaurant.entity.Food;
 import ku.cs.restaurant.entity.Promotion;
 import ku.cs.restaurant.service.ImageService;
+import ku.cs.restaurant.service.PromotionFoodService;
 import ku.cs.restaurant.service.PromotionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,21 +14,26 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
 @RestController
+@RequestMapping("/promotions")
 public class PromotionController {
     private final PromotionService promotionService;
     private final ImageService imageService;
+    private final PromotionFoodService promotionFoodService;
+    private static final String BASE_IMAGE_URL = "http://localhost:8088/images/promotions/";
 
-    public PromotionController(PromotionService promotionService, ImageService imageService) {
+    public PromotionController(PromotionService promotionService, ImageService imageService, PromotionFoodService promotionFoodService) {
         this.promotionService = promotionService;
         this.imageService = imageService;
+        this.promotionFoodService = promotionFoodService;
     }
 
-    // Create a new promotion
-    @PostMapping("/promotions")
+    // ✅ สร้างโปรโมชั่น (พร้อมอาหาร)
+    @PostMapping
     public ResponseEntity<ApiResponse<Promotion>> createPromotion(@RequestPart("promotion") PromotionCreateRequest request,
                                                                   @RequestPart("image") MultipartFile image) {
         try {
@@ -43,30 +50,57 @@ public class PromotionController {
         }
     }
 
-    // Get all promotions
-    @GetMapping("/promotions")
+    @GetMapping
     public ResponseEntity<ApiResponse<List<Promotion>>> getAllPromotions() {
         List<Promotion> promotions = promotionService.getAllPromotions();
-        return ResponseEntity.ok(new ApiResponse<>(true, "Promotions retrieved successfully.", promotions));
+
+        // ✅ อัปเดตพาธรูปภาพให้เป็น URL ที่เข้าถึงได้
+        promotions.forEach(promo -> {
+            if (promo.getImagePath() != null) {
+                String imagePath = promo.getImagePath().replace("\\", "/");
+                String fileName = imagePath.substring(imagePath.lastIndexOf("/") + 1);
+                promo.setImagePath(BASE_IMAGE_URL + fileName);
+            }
+        });
+
+        return ResponseEntity.ok(new ApiResponse<>(true, "Fetched all promotions.", promotions));
     }
 
-    // Get promotion by ID
-    @GetMapping("/promotions/{id}")
-    public ResponseEntity<ApiResponse<Promotion>> getPromotionById(@PathVariable UUID id) {
-        return promotionService.getPromotionById(id)
-                .map(promotion -> ResponseEntity.ok(new ApiResponse<>(true, "Promotion retrieved successfully.", promotion)))
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(new ApiResponse<>(false, "Promotion not found.", null)));
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<Map<String, Object>>> getPromotionById(@PathVariable UUID id) {
+        Optional<Promotion> promotionOpt = promotionService.getPromotionById(id);
+
+        if (promotionOpt.isPresent()) {
+            Promotion promotion = promotionOpt.get();
+
+            if (promotion.getImagePath() != null) {
+                String imagePath = promotion.getImagePath().replace("\\", "/");
+                String fileName = imagePath.substring(imagePath.lastIndexOf("/") + 1);
+                promotion.setImagePath(BASE_IMAGE_URL + fileName);
+            }
+
+            List<Food> foods = promotionFoodService.getFoodsByPromotion(id);
+
+            Map<String, Object> responseData = Map.of(
+                    "promotion", promotion,
+                    "foods", foods
+            );
+
+            return ResponseEntity.ok(new ApiResponse<>(true, "Promotion found.", responseData));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse<>(false, "Promotion not found.", null));
+        }
     }
 
-    // Delete a promotion
-    @DeleteMapping("/promotions")
-    public ResponseEntity<ApiResponse<Void>> deletePromotion(@RequestBody UUID id) {
-        try {
-            promotionService.deletePromotion(id);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT)
-                    .body(new ApiResponse<>(true, "Promotion deleted successfully.", null));
-        } catch (Exception e) {
+
+    // ✅ ลบโปรโมชั่น (พร้อมลบรูปภาพ)
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<Void>> deletePromotion(@PathVariable UUID id) {
+        boolean deleted = promotionService.deletePromotion(id);
+        if (deleted) {
+            return ResponseEntity.ok(new ApiResponse<>(true, "Promotion deleted successfully.", null));
+        } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ApiResponse<>(false, "Promotion not found.", null));
         }
