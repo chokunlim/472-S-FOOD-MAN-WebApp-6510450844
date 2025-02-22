@@ -17,26 +17,12 @@
 
             {{ promotionData.description }}
             <span class="text-yellow-500 font-bold">
-                {{ promotionData.type === 'PERCENTAGE' ? `${promotionData.discountValue}% OFF` : `฿${promotionData.discountValue} Discount` }}
+                {{promotionData.price}}฿
             </span>
             <p class="text-gray-500 text-xs">
                 {{ promotionData.startDate }} - {{ promotionData.endDate }}
             </p>
-            <button
-                class="px-2 py-1 rounded-md bg-yellow-300 shadow-md hover:bg-yellow-500 duration-100"
-                :class="{
-                    'opacity-20 cursor-not-allowed':
-                    promotionData.getCartItemCount(props.promotionData.id) >=
-                        props.promotionData.max,
-                }"
-                @click="addToCart(props.promotionData)"
-                :disabled="
-                    foodStore.getCartItemCount(props.promotionData.id) >=
-                    props.promotionData.max
-                "
-            >
-                Add to Cart
-            </button>
+           
         </div>
     </div>
 </template>

@@ -33,8 +33,7 @@ public class PromotionService {
         Promotion promotion = new Promotion();
         promotion.setName(request.getName());
         promotion.setDescription(request.getDescription());
-        promotion.setType(request.getType());
-        promotion.setDiscountValue(request.getDiscountValue());
+        promotion.setPrice(request.getPrice());
         promotion.setStartDate(request.getStartDate());
         promotion.setEndDate(request.getEndDate());
         promotion.setImagePath(imagePath);

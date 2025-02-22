@@ -25,12 +25,8 @@ public class Promotion {
     @Column(name = "p_description")
     private String description;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "p_type")
-    private PromotionType type;
-
-    @Column(name = "p_discount_value")
-    private double discountValue;
+    @Column(name = "p_price")
+    private double price;
 
     @Column(name = "p_start_date")
     private LocalDate startDate;

@@ -9,8 +9,7 @@ const foods = reactive([])
 type Promotion = {
     name: string
     description: string
-    type: 'PERCENTAGE' | 'FIXED_AMOUNT'
-    discountValue: number
+    price: number
     startDate: string
     endDate: string
     foodIds: string[]
@@ -19,8 +18,7 @@ type Promotion = {
 const form = reactive<Promotion>({
     name: '',
     description: '',
-    type: 'PERCENTAGE',
-    discountValue: 0.0,
+    price: 0.0,
     startDate: '2025-02-01',
     endDate: '2025-02-28',
     foodIds: [],
@@ -108,13 +106,8 @@ onMounted(fetchFoods)
                     class="p-2 border rounded"
                 />
 
-                <select v-model="form.type" class="p-2 border rounded">
-                    <option value="PERCENTAGE">Percentage</option>
-                    <option value="FIXED_AMOUNT">Fixed Amount</option>
-                </select>
-
                 <input
-                    v-model.number="form.discountValue"
+                    v-model.number="form.price"
                     type="number"
                     placeholder="Discount Value"
                     required
