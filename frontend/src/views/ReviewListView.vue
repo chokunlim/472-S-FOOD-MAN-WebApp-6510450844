@@ -43,14 +43,24 @@ const selectOption = (option) => {
 }
 
 const filteredReviews = computed(() => {
-    return reviews.value.filter((review) => {
-        const matchesStatus =
-            selectedOption.value === 'All Review'
+    let filtered = reviews.value.filter((review) => {
+        const matchesStatus = 
+            selectedOption.value === 'All Review' || 
+            (selectedOption.value === 'High-Low' || selectedOption.value === 'Low-High')
         const matchesSearch = searchQuery.value
             ? review.comment.toLowerCase().includes(searchQuery.value.toLowerCase())
             : true
+
         return matchesStatus && matchesSearch
     })
+
+    if (selectedOption.value === 'High-Low') {
+        filtered.sort((a, b) => b.rating - a.rating)
+    } else if (selectedOption.value === 'Low-High') {
+        filtered.sort((a, b) => a.rating - b.rating)
+    }
+
+    return filtered
 })
 
 const handleViewDetail = (reviewId) => {
@@ -63,13 +73,13 @@ const handleViewDetail = (reviewId) => {
         <aside class="fixed">
             <Sidebar />
         </aside>
-        <main
-            class="ml-[14rem] w-full py-4 px-8 flex flex-col gap-4 bg-gray-50 h-screen"
-        >
+        <main class="ml-[14rem] w-full py-4 px-8 flex flex-col gap-4 bg-gray-50 min-h-screen">
+            <!-- Page Title -->
             <section class="w-full">
                 <span class="font-bold text-3xl">Reviews</span>
             </section>
 
+            <!-- Dropdown Filter -->
             <div class="relative inline-block mt-2">
                 <button
                     @click="toggleDropdown"
@@ -83,9 +93,7 @@ const handleViewDetail = (reviewId) => {
                     class="absolute bg-white rounded-lg shadow-lg text-gray-500"
                 >
                     <li
-                        v-for="option in [
-                            'All Review',
-                        ]"
+                        v-for="option in ['All Review', 'High-Low', 'Low-High']"
                         :key="option"
                         @click="selectOption(option)"
                         class="px-4 py-2 hover:bg-gray-100 cursor-pointer rounded-lg"
@@ -95,7 +103,8 @@ const handleViewDetail = (reviewId) => {
                 </ul>
             </div>
 
-            <section class="mt-4">
+            <!-- Review Grid Section -->
+            <section class="mt-4 grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 <ReviewCard
                     v-for="(review, i) in filteredReviews"
                     :index="i + 1"

@@ -4,6 +4,7 @@ import ku.cs.restaurant.dto.ApiResponse;
 import ku.cs.restaurant.entity.Order;
 import ku.cs.restaurant.entity.OrderStatus;
 import ku.cs.restaurant.service.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
