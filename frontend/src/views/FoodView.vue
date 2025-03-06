@@ -31,10 +31,12 @@ const getUser = async () => {
 const addfood = () => {
     router.push('/addfood')
 }
+
 onMounted(() => {
     fetchFoods()
     getUser()
 })
+
 </script>
 
 <template>

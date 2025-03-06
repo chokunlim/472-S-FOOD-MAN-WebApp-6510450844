@@ -33,6 +33,11 @@ public class Promotion {
 
     @Column(name = "p_end_date")
     private LocalDate endDate;
+
+    @OneToOne
+    @JoinColumn(name = "food_id")
+    private Food food;
+
     @OneToMany(mappedBy = "promotion", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<PromotionFood> promotionFoods;

@@ -19,11 +19,12 @@ import java.util.UUID;
 @Embeddable
 public class PromotionFoodKey implements Serializable {
 
-    @Column(name = "p_id") // คีย์ของโปรโมชั่น
+    @Column(name = "p_id")
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID promotionId;
 
-    @Column(name = "f_id") // คีย์ของอาหาร
+    @Column(name = "f_id")
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID foodId;
+
 }
