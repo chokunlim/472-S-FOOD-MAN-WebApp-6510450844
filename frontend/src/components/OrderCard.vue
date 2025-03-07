@@ -38,7 +38,7 @@
             <span class="py-2 pl-1">
                 <button
                     v-if="order.status === 'COMPLETE' && role === 'ADMIN'"
-                    class="inline-block w-52 px-10 py-2 mt-2 mr-10 rounded-lg"
+                    class="inline-block w-52 px-10 py-2 mt-2 mr-2 rounded-lg"
                     style="background-color: #bcf14a; color: #000000"
                     @click="markOrderSuccess(order.id)"
                 >
@@ -46,26 +46,26 @@
                 </button>
                 <button
                     v-if="order.status === 'PENDING'"
-                    class="inline-block w-52 px-10 py-2 mt-2 mr-10 rounded-lg bg-yellow-300"
+                    class="inline-block w-52 px-10 py-2 mt-2 mr-2 rounded-lg bg-yellow-300"
                     @click="payAgain(order)"
                 >
                     Pay Again
                 </button>
                 <button
-                    class="px-12 py-2 mt-2 rounded-lg"
+                    class="px-12 py-2 mt-2 mr-2 rounded-lg"
                     style="background-color: #f6f6f6; color: #000000"
                     @click="viewOrderDetail"
                 >
                     View Details
                 </button>
-                <botton
+                <button
                     v-if="order.status === 'SUCCESS'"
-                    class="text-center inline-block w-52 px-10 py-2 mt-2 mr-10 rounded-lg bg-yellow-300 cursor-pointer"
+                    class="text-center inline-block w-52 px-10 py-2 mt-2 mr-2 rounded-lg bg-yellow-300 cursor-pointer"
                     style="background-color: #ff7f50; color: #ffffff"
                     @click="reviewOrder(order.id)"
                 >
                     Review Order
-                </botton>
+                </button>
             </span>
         </div>
         <div class="flex flex-col items-end">
