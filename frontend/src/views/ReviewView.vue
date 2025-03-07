@@ -1,112 +1,118 @@
 <template>
-    <div class="review-container">
+  <aside class="fixed">
+    <Sidebar />
+  </aside>
+  <main class="ml-[14rem] flex h-screen justify-center items-center">
+    <div class="review-container w-full shadow-md h-3/4">
       <h2>Submit a Review</h2>
-      <form @submit.prevent="submitReview">
+      <form @submit.prevent="submitReview" >
         <div>
           <label for="rating">Rating:</label>
-          <select v-model="review.rating" id="rating">
-            <option v-for="n in 5" :key="n" :value="n">{{ n }}</option>
-          </select>
+          <fa
+              v-for="i in 5"
+              :key="i"
+              icon="star"
+              :class="i <= review.rating ? 'text-yellow-500' : 'text-gray-300'"
+              @click="setRating(i)"
+              class="cursor-pointer text-3xl"
+          />
         </div>
-        <div>
+        <div class="flex flex-col">
           <label for="comment">Comment:</label>
-          <textarea v-model="review.comment" id="comment" rows="4"></textarea>
+          <textarea v-model="review.comment" id="comment" rows="6"></textarea>
+          <button class="shadow-md bg-yellow-300 px-4 py-2 buttom-0 rounded-lg" type="submit">Submit</button>
         </div>
-        <button type="submit">Submit</button>
       </form>
       <p>{{ message }}</p>
     </div>
+  </main>
 </template>
 
-<script>
+<script setup>
 import { ref, reactive, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import reviewApi from "@/api/reviewApi";
-import userApi from "@/api/userApi";
+import reviewApi from "@/api/reviewApi.js";
+import userApi from "@/api/userApi.js";
+import Sidebar from "@/components/Sidebar.vue";
 
-export default {
-    setup() {
-        const route = useRoute();
-        const message = ref("");
-        const review = reactive({
-            reviewId: "",
-            comment: "",
-            reviewDate: "",
-            rating: 1,
-            customerId: "",
-            orderId: route.params.id,
-        });
+const route = useRoute();
+const message = ref("");
+const review = reactive({
+  reviewId: "",
+  comment: "",
+  reviewDate: "",
+  rating: 1,
+  customerId: "",
+  orderId: route.params.id,
+});
 
-        const submitReview = async () => {
-            try {
-                const { data: customer_res } = await userApi.getUserByJwt();
-                review.customerId = customer_res.id;
+const setRating = (rating) => {
+  review.rating = rating
+}
 
-
-                console.log(review.orderId);
-                console.log(review.rating);
-                console.log(review.comment);
+const submitReview = async () => {
+  try {
+      const { data: customer_res } = await userApi.getUserByJwt();
+      review.customerId = customer_res.id;
 
 
-                const { data: review_res } = await reviewApi.createReview({
-                    orderId: review.orderId,
-                    rating: review.rating,
-                    comment: review.comment,
-                });
+      console.log(review.orderId);
+      console.log(review.rating);
+      console.log(review.comment);
 
-                message.value = "Review submitted successfully!";
-                console.log(review_res);
-                console.log(customer_res);
-                
-            } catch (error) {
-                message.value = "Error submitting review.";
-                console.error("Error submitting review:", error);
-            }
-        };
 
-        onMounted(async () => {
-            try {
-                const { data: customer_res } = await userApi.getUserByJwt();
-                review.customerId = customer_res.id;
-            } catch (error) {
-                message.value = "Error fetching user data.";
-                console.error("Error fetching user:", error);
-            }
-        });
+      const { data: review_res } = await reviewApi.createReview({
+          orderId: review.orderId,
+          rating: review.rating,
+          comment: review.comment,
+      });
 
-        watch(
-            () => route.params.id,
-            (newId) => {
-                review.orderId = newId;
-            }
-        );
+      message.value = "Review submitted successfully!";
+      console.log(review_res);
+      console.log(customer_res);
 
-        return {
-            review,
-            message,
-            submitReview,
-        };
-    },
+  } catch (error) {
+      message.value = "Error submitting review.";
+      console.error("Error submitting review:", error);
+  }
 };
+
+onMounted(async () => {
+  try {
+      const { data: customer_res } = await userApi.getUserByJwt();
+      review.customerId = customer_res.id;
+  } catch (error) {
+      message.value = "Error fetching user data.";
+      console.error("Error fetching user:", error);
+  }
+});
+
+watch(
+  () => route.params.id,
+  (newId) => {
+      review.orderId = newId;
+  }
+);
 </script>
 
 <style scoped>
 .review-container {
-  max-width: 400px;
-  margin: auto;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  background: #f9f9f9;
+max-width: 1000px;
+min-width: 200px;
+margin: auto;
+padding: 20px;
+border: 1px solid #ddd;
+border-radius: 10px;
+background: #f9f9f9;
 }
 label {
-  display: block;
-  margin: 10px 0 5px;
+display: block;
+margin: 10px 0 5px;
 }
 textarea {
-  width: 100%;
+width: 100%;
 }
 button {
-  margin-top: 10px;
+margin-top: 10px;
 }
 </style>
