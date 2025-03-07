@@ -48,7 +48,9 @@ const filteredReviews = computed(() => {
             selectedOption.value === 'All Review' || 
             (selectedOption.value === 'High-Low' || selectedOption.value === 'Low-High')
         const matchesSearch = searchQuery.value
-            ? review.comment.toLowerCase().includes(searchQuery.value.toLowerCase())
+            ? review.comment
+                .toLowerCase()
+                .includes(searchQuery.value.toLowerCase())
             : true
 
         return matchesStatus && matchesSearch
@@ -73,13 +75,13 @@ const handleViewDetail = (reviewId) => {
         <aside class="fixed">
             <Sidebar />
         </aside>
-        <main class="ml-[14rem] w-full py-4 px-8 flex flex-col gap-4 bg-gray-50 min-h-screen">
-            <!-- Page Title -->
+        <main
+            class="ml-[14rem] w-full py-4 px-8 flex flex-col gap-4 bg-gray-50 h-full"
+        >
             <section class="w-full">
                 <span class="font-bold text-3xl">Reviews</span>
             </section>
 
-            <!-- Dropdown Filter -->
             <div class="relative inline-block mt-2">
                 <button
                     @click="toggleDropdown"
@@ -103,9 +105,9 @@ const handleViewDetail = (reviewId) => {
                 </ul>
             </div>
 
-            <!-- Review Grid Section -->
-            <section class="mt-4 grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <section class="mt-4">
                 <ReviewCard
+                    class="animate-slideUp"
                     v-for="(review, i) in filteredReviews"
                     :index="i + 1"
                     :key="review.review_id"

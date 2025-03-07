@@ -1,82 +1,62 @@
 <template>
-  <div class="review-card">
-    <h1 class="review-title">Customer Review</h1>
-    <p class="review-date"><strong>Review Date:</strong> {{ review.createdAt }}</p>
-    <p><strong>Order ID:</strong> #{{ review.order.id.slice(0, 4) }}</p>
-    <p><strong>Customer ID:</strong> #{{ review.customer.id.slice(0, 4) }}</p>
-    <p class="review-comment"><strong>Comment:</strong> {{ review.comment }}</p>
-    <p class="review-rating"><strong>Rating:</strong> <span v-html="starRating"></span></p>
+  <div class="border-2 rounded-md p-4 w-full mb-4 shadow-md h-fit min-w-48">
+      <div class="flex justify-between">
+          <p>Order ID: #{{ review.order.id.slice(0, 4) }}</p>
+          <div class="flex gap-4 items-center">
+              <button 
+              v-if="loginUserId === review.customer.id || role === 'ADMIN'"
+              class="bg-red-500 text-white px-2 py-1 rounded-md"
+              @click="deleteReview(review.id)"
+          >
+              Delete
+          </button>
+          </div>
+      </div>
+      <p>Customer Name: {{ review.customer.username }}</p>
+
+      <p>
+          Review Date:
+          {{
+              review.createdAt.split('T')[0] +
+              ' | ' +
+              review.createdAt.split('T')[1].slice(0, 5)
+          }}
+      </p>
+      <fa
+          v-for="i in 5"
+          :key="i"
+          icon="star"
+          :class="i <= review.rating ? 'text-yellow-500' : 'text-gray-300'"
+          class="text-lg"
+      />
+      <p class="bg-gray-200 py-4 px-2 rounded-md h-fit">
+          {{ review.comment }}
+      </p>
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    review: {
-      type: Object,
-      required: true,
-    },
-  },
-  computed: {
-    starRating() {
-      const filledStars = '★'.repeat(this.review.rating);
-      const emptyStars = '☆'.repeat(5 - this.review.rating);
-      return `<span class="stars">${filledStars}</span><span class="stars empty">${emptyStars}</span>`;
-    },
-  },
-};
+<script setup lang="ts">
+import { ref, defineProps, onMounted } from 'vue'
+import reviewApi from '@/api/reviewApi.js'
+
+const props = defineProps<{ review }>()
+const loginUserId = ref<string>('')
+const role = ref<string>('')
+
+const deleteReview = async (id) => {
+  try {
+      await reviewApi.deleteReview(id)
+      console.log('Review deleted')
+      window.location.reload()
+  } catch (error) {
+      console.error('Error deleting review:', error)
+  }
+}
+
 </script>
 
 <style scoped>
-.review-card {
-  background: #fff;
-  border-radius: 12px;
-  padding: 20px;
-  max-width: 400px;
-  margin: auto;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease-in-out;
-}
-
-.review-card:hover {
-  transform: translateY(-5px);
-}
-
-.review-title {
-  text-align: center;
-  font-size: 22px;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 10px;
-}
-
-.review-date {
-  font-size: 14px;
-  color: #666;
-}
-
-.review-card p {
-  margin: 8px 0;
-  font-size: 16px;
-  color: #444;
-}
-
-.review-comment {
-  font-size: 18px;
-  color: #555;
-}
-
-.review-rating {
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.stars {
-  color: gold;
-  font-size: 20px;
-}
-
-.stars.empty {
-  color: #ddd;
+.star {
+  color: grey;
 }
 </style>
