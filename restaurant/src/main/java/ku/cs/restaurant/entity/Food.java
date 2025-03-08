@@ -35,12 +35,4 @@ public class Food {
     @OneToMany(mappedBy = "food")
     @JsonIgnore
     private List<Recipe> recipes;
-
-    @OneToMany(mappedBy = "food")
-    @JsonIgnore
-    private List<PromotionFood> promotionFoods;
-
-    @OneToOne(mappedBy = "food")
-    private Promotion promotion;
 }
-

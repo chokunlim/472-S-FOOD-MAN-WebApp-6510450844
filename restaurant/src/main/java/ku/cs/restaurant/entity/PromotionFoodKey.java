@@ -18,7 +18,6 @@ import java.util.UUID;
 @EqualsAndHashCode
 @Embeddable
 public class PromotionFoodKey implements Serializable {
-
     @Column(name = "p_id")
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID promotionId;
@@ -26,5 +25,4 @@ public class PromotionFoodKey implements Serializable {
     @Column(name = "f_id")
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID foodId;
-
 }

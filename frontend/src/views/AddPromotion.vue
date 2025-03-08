@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
 import Sidebar from '@/components/Sidebar.vue'
-import foodApi from '@/api/foodApi'
 import promotionApi from '@/api/promotionApi'
+import foodApi from '@/api/foodApi'
 
 const foods = reactive([])
+const food = ref([])
 
 type Promotion = {
     name: string
@@ -24,7 +25,7 @@ const form = reactive<Promotion>({
     foodIds: [],
 })
 
-async function fetchFoods() {
+async function getFoods() {
     try {
         const { data: res } = await foodApi.getFoods()
         foods.push(...res.data)
@@ -65,7 +66,7 @@ const createPromotion = async () => {
         formData.append('image', imageFile.value)
 
         await promotionApi.createPromotion(formData)
-        alert('Ingredient added successfully!')
+        alert('Promotion added successfully!')
     } catch (error) {
         console.error('Error adding ingredient:', error.response?.data)
         alert(
@@ -76,7 +77,10 @@ const createPromotion = async () => {
     }
 }
 
-onMounted(fetchFoods)
+onMounted(() => {
+    getFoods()
+})
+
 </script>
 
 <template>

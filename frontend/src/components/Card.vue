@@ -54,6 +54,6 @@ const foodStore = foodsStore()
 
 const addToCart = (food) => {
     console.log(food.max)
-    foodStore.addToCart(food)
+    foodStore.addToCart(food, 'food')
 }
 </script>

@@ -71,7 +71,7 @@ const handleOrderSuccess = async (orderId) => {
     const order = orders.value.find((o) => o.id === orderId)
     if (order) {
         try {
-            await orderApi.createOrder({ ...order, status: 'Success' })
+            await orderApi.updateOrderStatus({ id: orderId, status: 'SUCCESS' })
             order.status = 'Success'
         } catch (error) {
             console.error('Error updating order:', error)

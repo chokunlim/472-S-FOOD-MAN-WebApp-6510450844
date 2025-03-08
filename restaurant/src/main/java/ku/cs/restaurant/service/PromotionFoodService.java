@@ -10,6 +10,7 @@ import ku.cs.restaurant.repository.PromotionFoodRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -38,6 +39,14 @@ public class PromotionFoodService {
     // ดึงรายการอาหารในโปรโมชั่น
     public List<Food> getFoodsByPromotion(UUID promotionId) {
         List<PromotionFood> promotionFoods = promotionFoodRepository.findByPromotionId(promotionId);
+        return promotionFoods.stream()
+                .map(PromotionFood::getFood)
+                .collect(Collectors.toList());
+    }
+
+    public Collection<Food> getFoodsForPromotion(UUID promotionId) {
+        List<PromotionFood> promotionFoods = promotionFoodRepository.findByPromotionId(promotionId);
+
         return promotionFoods.stream()
                 .map(PromotionFood::getFood)
                 .collect(Collectors.toList());
