@@ -24,10 +24,18 @@ public class UserService {
 
     public ApiResponse<SignupResponse> createUser(SignupRequest user) {
         SignupResponse signupResponse = new SignupResponse();
+
         Optional<User> existedUser = userRepository.findByUsername(user.getUsername());
+        Optional<User> existedEmail = userRepository.findByEmail(user.getEmail());
 
         if (existedUser.isPresent()) {
             signupResponse.setMessage("Username already exists");
+            return new ApiResponse<>(false, signupResponse.getMessage(), signupResponse);
+        }
+
+        // Check if a user with the given email already exists
+        if (existedEmail.isPresent()) {
+            signupResponse.setMessage("Email already exists");
             return new ApiResponse<>(false, signupResponse.getMessage(), signupResponse);
         }
 
@@ -48,6 +56,7 @@ public class UserService {
         newUser.setUsername(username);
         newUser.setPhone(phone);
         newUser.setPassword(encodedPassword);
+        newUser.setEmail(user.getEmail());
         newUser.setRole(role);
 
         userRepository.save(newUser);
