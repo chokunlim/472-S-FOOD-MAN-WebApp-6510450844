@@ -5,7 +5,7 @@ import ku.cs.restaurant.dto.food.FoodsResponse;
 import ku.cs.restaurant.entity.Food;
 import ku.cs.restaurant.entity.Ingredient;
 import ku.cs.restaurant.entity.Recipe;
-import ku.cs.restaurant.entity.Status;
+import ku.cs.restaurant.common.Status;
 import ku.cs.restaurant.repository.FoodRepository;
 import org.springframework.stereotype.Service;
 

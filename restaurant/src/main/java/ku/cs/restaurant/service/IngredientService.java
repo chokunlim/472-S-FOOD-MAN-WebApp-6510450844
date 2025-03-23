@@ -3,7 +3,7 @@ package ku.cs.restaurant.service;
 import ku.cs.restaurant.dto.financial.CreateFinancialRequest;
 import ku.cs.restaurant.entity.Ingredient;
 import ku.cs.restaurant.repository.IngredientRepository;
-import ku.cs.restaurant.entity.Status;
+import ku.cs.restaurant.common.Status;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
