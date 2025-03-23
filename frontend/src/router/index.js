@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 import SignupView from '@/views/SignupView.vue'
 import SigninView from '@/views/SigninView.vue'
 import FoodView from '@/views/FoodView.vue'
-import OrderView from '@/views/OrderView.vue'
 import IngredientView from '@/views/IngredientView.vue'
 import ReceiptView from '@/views/ReceiptView.vue'
 import DashboardView from '@/views/DashboardView.vue'
@@ -28,11 +27,6 @@ const routes = [
         path: '/food',
         name: 'food',
         component: FoodView,
-    },
-    {
-        path: '/order',
-        name: 'order',
-        component: OrderView,
     },
     {
         path: '/ingredient',
@@ -73,6 +67,24 @@ const routes = [
         path: '/addfood',
         name: 'addfood',
         component: AddFoodView,
+    },
+
+
+    // Orders
+    {
+        path: '/order',
+        name: 'order',
+        component: () => import('@/views/orders/OrderView.vue'),
+    },
+    {
+        path: '/orderforrider',
+        name: 'orderforrider',
+        component: () => import('@/views/orders/OrderRiderView.vue'),
+    },
+    {
+        path: '/orderhistory',
+        name: 'orderhistory',
+        component: () => import('@/views/orders/OrderHistoryView.vue'),
     },
 ]
 
