@@ -15,7 +15,6 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Value("${stripe.api.key.test}")
     private String stripeSecretKey;
-    private EmailService emailService;
 
     @Override
     public PaymentResponse createPaymentLink(Order order) throws StripeException {
@@ -49,8 +48,6 @@ public class PaymentServiceImpl implements PaymentService {
 
         PaymentResponse response = new PaymentResponse();
         response.setPaymentLink(session.getUrl());
-
-        emailService.sendPaymentSuccessEmail(order.getUser().getEmail());
 
         return response;
     }

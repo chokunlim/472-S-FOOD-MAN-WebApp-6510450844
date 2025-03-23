@@ -3,6 +3,7 @@ package ku.cs.restaurant.service;
 import ku.cs.restaurant.dto.promotion.PromotionCreateRequest;
 import ku.cs.restaurant.entity.Promotion;
 import ku.cs.restaurant.repository.PromotionRepository;
+import ku.cs.restaurant.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,8 @@ public class PromotionService {
     private static final Logger logger = LoggerFactory.getLogger(PromotionService.class);
     private final PromotionRepository promotionRepository;
     private final PromotionFoodService promotionFoodService;
+    private final UserService userService;
+    private final EmailService emailService;
 
     public List<Promotion> getAllPromotions() {
         return promotionRepository.findAll();
@@ -29,7 +32,7 @@ public class PromotionService {
         return promotionRepository.findById(id);
     }
 
-    public Promotion createPromotion(PromotionCreateRequest request, String imagePath) {
+    public Promotion createPromotion(PromotionCreateRequest request, String imagePath) throws InterruptedException {
         Promotion promotion = new Promotion();
         promotion.setName(request.getName());
         promotion.setDescription(request.getDescription());
@@ -45,6 +48,13 @@ public class PromotionService {
             for (UUID foodId : request.getFoodIds()) {
                 promotionFoodService.addFoodToPromotion(savedPromotion.getId(), foodId);
             }
+        }
+
+        List<String> userEmails = userService.getAllUserEmails();
+        for (String email : userEmails) {
+            System.out.println(email);
+            emailService.newPromotion(email.trim());
+            Thread.sleep(60000);
         }
 
         return savedPromotion;

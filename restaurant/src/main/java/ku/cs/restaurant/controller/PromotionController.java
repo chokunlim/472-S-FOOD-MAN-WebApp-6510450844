@@ -9,6 +9,8 @@ import ku.cs.restaurant.service.PromotionFoodService;
 import ku.cs.restaurant.service.PromotionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,6 +36,7 @@ public class PromotionController {
 
     // ✅ สร้างโปรโมชั่น (พร้อมอาหาร)
     @PostMapping
+    @Transactional
     public ResponseEntity<ApiResponse<Promotion>> createPromotion(@RequestPart("promotion") PromotionCreateRequest request,
                                                                   @RequestPart("image") MultipartFile image) {
         try {

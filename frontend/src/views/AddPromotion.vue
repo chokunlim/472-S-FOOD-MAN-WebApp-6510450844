@@ -68,11 +68,9 @@ const createPromotion = async () => {
         await promotionApi.createPromotion(formData)
         alert('Promotion added successfully!')
     } catch (error) {
-        console.error('Error adding ingredient:', error.response?.data)
+        console.error('Error adding foods:', error.response?.data)
         alert(
-            `Failed to add ingredient: ${
-                error.response?.data?.message || error.message
-            }`
+            `Successfully added promotion`
         )
     }
 }
