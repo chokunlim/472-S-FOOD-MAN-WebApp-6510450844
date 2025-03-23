@@ -67,14 +67,14 @@ const menuItems = [
     {   
         label: 'Promotions', 
         icon:'bullhorn', 
-        path: ['/promotions'] ,
+        path: '/promotions' ,
         role: ['ADMIN', 'CUSTOMER']
     },
     {    
         label: 'Review', 
         icon: 'book', 
         path: '/reviewlistview', 
-        role: ['ADMIN']
+        role: ['ADMIN', 'CUSTOMER']
     },
     {
         label: 'Menu',
