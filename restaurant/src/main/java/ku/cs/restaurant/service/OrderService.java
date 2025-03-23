@@ -12,6 +12,7 @@ import ku.cs.restaurant.repository.UserRepository;
 import ku.cs.restaurant.utils.JwtUtils;
 import ku.cs.restaurant.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
+import ku.cs.restaurant.common.OrderStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

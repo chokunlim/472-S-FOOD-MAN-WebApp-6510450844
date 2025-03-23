@@ -1,104 +1,113 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import SignupView from '@/views/SignupView.vue'
-import SigninView from '@/views/SigninView.vue'
-import FoodView from '@/views/FoodView.vue'
-import OrderView from '@/views/OrderView.vue'
-import IngredientView from '@/views/IngredientView.vue'
-import ReceiptView from '@/views/ReceiptView.vue'
-import DashboardView from '@/views/DashboardView.vue'
-import CartView from '@/views/CartView.vue'
-import SuccessView from '@/views/SuccessView.vue'
-import CancelView from '@/views/CancelView.vue'
-import AddIngredientsView from '@/views/AddIngredientsView.vue'
-import AddFoodView from '@/views/AddFoodView.vue'
-import PromotionsView from'@/views/PromotionsView.vue'
-import AddPromotion from '@/views/AddPromotion.vue'
 import authApi from '@/api/authApi'
-import ReviewView from '@/views/ReviewView.vue'
-import ReviewListView from '@/views/ReviewListView.vue'
 
 const routes = [
+
+    // login-signup
     {
         path: '/signup',
         name: 'signup',
-        component: SignupView,
+        component: () => import('@/views/SignupView.vue'),
     },
     {
         path: '/signin',
         name: 'signin',
-        component: SigninView,
+        component: () => import('@/views/SigninView.vue'),
     },
+
+    // Food
     {
         path: '/food',
         name: 'food',
-        component: FoodView,
-    },
-    {
-        path: '/order',
-        name: 'order',
-        component: OrderView,
-    },
-    {
-        path: '/ingredient',
-        name: 'ingredient',
-        component: IngredientView,
-    },
-    {
-        path: '/receipt/:id',
-        name: 'receipt',
-        component: ReceiptView,
-    },
-    {
-        path: '/dashboard',
-        name: 'dashboard',
-        component: DashboardView,
-    },
-    {
-        path: '/cart',
-        name: 'cart',
-        component: CartView,
-    },
-    {
-        path: '/payment/success',
-        name: 'success',
-        component: SuccessView,
-    },
-    {
-        path: '/payment/fail',
-        name: 'fail',
-        component: CancelView,
-    },
-    {
-        path: '/addingredients',
-        name: 'addingredients',
-        component: AddIngredientsView,
+        component: () => import('@/views/FoodView.vue'),
     },
     {
         path: '/addfood',
         name: 'addfood',
-        component: AddFoodView,
+        component: () => import('@/views/AddFoodView.vue'),
     },
+
+    {
+        path: '/receipt/:id',
+        name: 'receipt',
+        component: () => import('@/views/ReceiptView.vue'),
+    },
+    {
+        path: '/dashboard',
+        name: 'dashboard',
+        component: () => import('@/views/DashboardView.vue'),
+    },
+    {
+        path: '/cart',
+        name: 'cart',
+        component: () => import('@/views/CartView.vue'),
+    },
+
+    // Ingredient
+    {
+        path: '/ingredient',
+        name: 'ingredient',
+        component: () => import('@/views/IngredientView.vue'),
+    },
+    {
+        path: '/addingredients',
+        name: 'addingredients',
+        component: () => import('@/views/AddIngredientsView.vue'),
+    },
+
+    // Review
     {
         path: '/order/:id/review',
         name: 'ReviewView',
-        component: ReviewView,
+        component: () => import('@/views/ReviewView.vue'),
     },
     {
         path: '/reviewlistview',
         name: 'ReviewListView',
-        component: ReviewListView,
+        component: () => import('@/views/ReviewListView.vue'),
     },
+
+    // Promotions
     {
         path: '/promotions',
         name: 'promotions',
-        component: PromotionsView,
+        component: () => import('@/views/PromotionsView.vue'),
     },
     {
         path: '/addpromotion',
         name: 'addpromotion',
-        component: AddPromotion,
+        component: () => import('@/views/AddPromotion.vue'),
+    },
+
+     // Payment
+     {
+        path: '/payment/success',
+        name: 'success',
+        component: () => import('@/views/SuccessView.vue'),
+    },
+    {
+        path: '/payment/fail',
+        name: 'fail',
+        component: () => import('@/views/CancelView.vue'),
     },
     
+    // Order
+    {
+        path: '/order',
+        name: 'order',
+        component: () => import('@/views/orders/OrderView.vue'),
+    },
+    {
+        path: '/orderforrider',
+        name: 'orderforrider',
+        component: () => import('@/views/orders/OrderRiderView.vue'),
+    },
+    {
+        path: '/orderhistory',
+        name: 'orderhistory',
+        component: () => import('@/views/orders/OrderHistoryView.vue'),
+    },
+
 ]
 
 const router = createRouter({
