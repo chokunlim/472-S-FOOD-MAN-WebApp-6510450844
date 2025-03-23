@@ -48,6 +48,7 @@ public class UserController {
             res.setUsername(user.getUsername());
             res.setId(user.getId());
             res.setRole(user.getRole());
+            res.setEmail(user.getEmail());
             res.setPhone(user.getPhone());
             return ResponseEntity.ok(new ApiResponse<>(true, "User details retrieved successfully.", res));
         }

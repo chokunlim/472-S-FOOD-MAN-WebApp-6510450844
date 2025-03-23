@@ -32,7 +32,8 @@ public class IngredientController {
 
     // Create a new ingredient
     @PostMapping("/ingredient")
-    public ResponseEntity<ApiResponse<Ingredient>> createIngredient(@RequestPart("ingredient") Ingredient ingredient, @RequestPart("image") MultipartFile image) {
+    public ResponseEntity<ApiResponse<Ingredient>> createIngredient(@RequestPart("ingredient") Ingredient ingredient,
+                                                                    @RequestPart("image") MultipartFile image) {
         try {
             String imagePath = imageService.saveImage("src/main/resources/images/ingredients", image);
             ingredient.setImagePath(imagePath);

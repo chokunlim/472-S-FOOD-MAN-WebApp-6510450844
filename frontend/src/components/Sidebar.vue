@@ -5,7 +5,7 @@
         <div class="flex flex-col gap-12">
             <div class="flex items-center">
                 <img src="../assets/food-icon.png" width="42px" />
-                <router-link to="/food">
+                <router-link to="/promotions">
                     <span class="flex font-bold text-lg"
                         >&nbsp;SuperDuperPOS</span
                     >
@@ -62,6 +62,7 @@ onMounted(async () => {
 })
 
 const menuItems = [
+    { label: 'Promotions', icon:'bullhorn', path: '/promotions' },
     { label: 'Menu', icon: 'bars', path: '/food' },
     { label: 'Order', icon: 'book', path: '/order' },
     { label: 'Ingredient', icon: 'book', path: '/ingredient', role: 'ADMIN' },

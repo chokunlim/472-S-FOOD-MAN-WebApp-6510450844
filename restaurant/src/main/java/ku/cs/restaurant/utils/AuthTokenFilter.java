@@ -58,9 +58,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
             String requestUri = request.getRequestURI();
 
-            if (requestUri.matches("/foods|/order|/order_line|/recipe|/receipt|/user|/financial|/review")) {
+            if (requestUri.matches("^/(foods|order|order_line|recipe|receipt|user|financial|review|promotions)$")) {
                 hasRequiredRole = roles.contains("CUSTOMER") || roles.contains("ADMIN");
-            } else if (requestUri.matches("/foods/.*|/order/.*|/order_line/.*|/recipe/.*|/receipt.*|/user/.*|/financial/.*|/review/.*")) {
+            } else if (requestUri.matches("^/(foods|order|order_line|recipe|receipt|user|financial|review|promotions)/.*")) {
                 hasRequiredRole = roles.contains("CUSTOMER") || roles.contains("ADMIN");
             } else if (requestUri.equals("/ingredient")) {
                 hasRequiredRole = roles.contains("ADMIN");
