@@ -49,7 +49,7 @@ const filteredOrders = computed(() => {
     return orders.value.filter((order) => {
         const matchesStatus =
             role.value === 'RIDER' &&
-            (order.status === 'READY' || order.status === 'DELIVERING')
+            (order.status === 'COMPLETE' || order.status === 'DELIVERING')
         const matchesSearch = searchQuery.value
             ? order.user.toLowerCase().includes(searchQuery.value.toLowerCase())
             : true
