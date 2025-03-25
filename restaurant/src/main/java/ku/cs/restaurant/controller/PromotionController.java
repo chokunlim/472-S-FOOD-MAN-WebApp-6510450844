@@ -108,4 +108,30 @@ public class PromotionController {
                     .body(new ApiResponse<>(false, "Promotion not found.", null));
         }
     }
+    // ✅ แก้ไขโปรโมชั่น
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity<ApiResponse<Promotion>> updatePromotion(@PathVariable UUID id,
+                                                                  @RequestPart("promotion") PromotionCreateRequest request,
+                                                                  @RequestPart(value = "image", required = false) MultipartFile image) {
+        try {
+            String imagePath = null;
+            if (image != null && !image.isEmpty()) {
+                imagePath = imageService.saveImage("src/main/resources/images/promotions", image);
+            }
+
+            // เรียกใช้ฟังก์ชัน updatePromotion ใน PromotionService
+            Promotion updatedPromotion = promotionService.updatePromotion(id, request, imagePath);
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ApiResponse<>(true, "Promotion updated successfully.", updatedPromotion));
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(false, "Failed to save image: " + e.getMessage(), null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse<>(false, "An error occurred: " + e.getMessage(), null));
+        }
+    }
+
 }

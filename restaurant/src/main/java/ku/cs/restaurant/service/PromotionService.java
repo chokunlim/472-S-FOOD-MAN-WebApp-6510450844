@@ -65,6 +65,7 @@ public class PromotionService {
         if (promotionOpt.isPresent()) {
             Promotion promotion = promotionOpt.get();
 
+            // ลบไฟล์ภาพ (ถ้ามี)
             if (promotion.getImagePath() != null) {
                 try {
                     Files.deleteIfExists(Paths.get(promotion.getImagePath()));
@@ -74,10 +75,32 @@ public class PromotionService {
                 }
             }
 
+            // ลบข้อมูลโปรโมชั่นจากฐานข้อมูล
             promotionRepository.deleteById(id);
+            return true;  // ลบสำเร็จ
         } else {
             logger.warn("Promotion ID {} not found, skipping deletion.", id);
+            return false;  // ไม่พบโปรโมชั่น
         }
-        return false;
+    }
+    public Promotion updatePromotion(UUID id, PromotionCreateRequest request, String imagePath) {
+        Optional<Promotion> promotionOpt = promotionRepository.findById(id);
+        if (promotionOpt.isPresent()) {
+            Promotion promotion = promotionOpt.get();
+            promotion.setName(request.getName());
+            promotion.setDescription(request.getDescription());
+            promotion.setPrice(request.getPrice());
+            promotion.setStartDate(request.getStartDate());
+            promotion.setEndDate(request.getEndDate());
+
+            // อัปเดตพาธรูปภาพ ถ้ามี
+            if (imagePath != null) {
+                promotion.setImagePath(imagePath);
+            }
+
+            return promotionRepository.save(promotion);
+        } else {
+            throw new IllegalArgumentException("Promotion not found with id: " + id);
+        }
     }
 }
