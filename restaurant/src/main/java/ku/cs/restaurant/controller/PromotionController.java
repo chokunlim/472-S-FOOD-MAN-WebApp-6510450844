@@ -55,7 +55,7 @@ public class PromotionController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<Promotion>>> getAllPromotions() {
-        List<Promotion> promotions = promotionService.getAllPromotions();
+        List<Promotion> promotions = promotionService.getActivePromotions();  // ดึงข้อมูลเฉพาะโปรโมชั่นที่ยังไม่หมดอายุ
 
         // ✅ อัปเดตพาธรูปภาพให้เป็น URL ที่เข้าถึงได้
         promotions.forEach(promo -> {
@@ -66,7 +66,7 @@ public class PromotionController {
             }
         });
 
-        return ResponseEntity.ok(new ApiResponse<>(true, "Fetched all promotions.", promotions));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Fetched active promotions.", promotions));
     }
 
     @GetMapping("/{id}")
@@ -84,6 +84,7 @@ public class PromotionController {
 
             List<Food> foods = promotionFoodService.getFoodsByPromotion(id);
 
+            // ส่งข้อมูลที่เป็น Map ซึ่งจะมีทั้งข้อมูลโปรโมชั่นและรายการอาหาร
             Map<String, Object> responseData = Map.of(
                     "promotion", promotion,
                     "foods", foods
@@ -95,6 +96,7 @@ public class PromotionController {
                     .body(new ApiResponse<>(false, "Promotion not found.", null));
         }
     }
+
 
 
     // ✅ ลบโปรโมชั่น (พร้อมลบรูปภาพ)
@@ -133,5 +135,6 @@ public class PromotionController {
                     .body(new ApiResponse<>(false, "An error occurred: " + e.getMessage(), null));
         }
     }
+
 
 }

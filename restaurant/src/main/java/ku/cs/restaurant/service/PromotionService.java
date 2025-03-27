@@ -11,9 +11,11 @@ import org.springframework.stereotype.Service;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -103,4 +105,16 @@ public class PromotionService {
             throw new IllegalArgumentException("Promotion not found with id: " + id);
         }
     }
+    public List<Promotion> getActivePromotions() {
+        // ใช้วันที่ปัจจุบันในการกรองโปรโมชั่นที่ยังไม่หมดอายุ
+        return promotionRepository.findAll().stream()
+                .filter(promotion -> promotion.getEndDate().isAfter(LocalDate.now()))
+                .collect(Collectors.toList());
+    }
+    public Promotion getPromotionDetails(UUID promoId) {
+        // ค้นหาข้อมูลโปรโมชั่นจากฐานข้อมูลโดยใช้ promoId
+        return promotionRepository.findById(promoId)
+                .orElse(null);  // ถ้าไม่พบโปรโมชั่นให้คืนค่า null
+    }
+
 }
