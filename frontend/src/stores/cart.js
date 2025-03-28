@@ -3,15 +3,14 @@ import foodApi from '@/api/foodApi'
 
 export const foodsStore = defineStore('foods', {
     state: () => ({
-        foods: [],
+        foods: [], // List of all foods
+        promotions: [], // List of all promotions
         cart: JSON.parse(localStorage.getItem('carts')) || [],
     }),
 
     getters: {
         cartQty: (state) => {
-            console.log(
-                state.foods.reduce((sum, item) => sum + item.quantity, 0)
-            )
+            // Calculate total quantity for both food and promotion items
             return state.cart.reduce((sum, item) => sum + item.quantity, 0)
         },
     },
@@ -26,17 +25,30 @@ export const foodsStore = defineStore('foods', {
             }
         },
 
-        addToCart(food) {
+        async fetchPromotions() {
+            // Fetch the promotions from your API
+            try {
+                const { data: res } = await foodApi.getPromotions() // You should have an API for promotions
+                this.promotions = res.data
+            } catch (error) {
+                console.error('Error fetching promotions:', error)
+            }
+        },
+
+        // Add food or promotion to the cart
+        addToCart(item, type = 'food') {
             const existingItem = this.cart.find(
-                (item) => item.food.id === food.id
+                (cartItem) => cartItem.type === type && cartItem.id === item.id
             )
             if (existingItem) {
-                // เพิ่มจำนวนถ้าอาหารมีอยู่ในตะกร้าแล้ว
+                // Increase quantity if the item already exists in the cart
                 existingItem.quantity += 1
             } else {
-                // ถ้าอาหารไม่อยู่ในตะกร้า ให้เพิ่มรายการใหม่พร้อมจำนวน 1
-                this.cart.push({ food, quantity: 1 })
+                // Add a new item to the cart
+                this.cart.push({ ...item, type, quantity: 1 })
             }
+
+            // Save cart to localStorage
             localStorage.setItem('carts', JSON.stringify(this.cart))
             console.log('Updated cart:', this.cart)
             console.log(localStorage.getItem('carts'))
@@ -45,32 +57,41 @@ export const foodsStore = defineStore('foods', {
         removeFromCart(id) {
             console.log('remove ', id)
             this.cart = this.cart.filter((item) => {
-                // ถ้าจำนวนมากกว่า 1 ให้ลดจำนวน ถ้าน้อยกว่าหรือเท่ากับ 1 ให้ลบออก
-                if (item.food.id === id) {
+                if (item.id === id) {
+                    // Decrease quantity if it's greater than 1, else remove the item
                     if (item.quantity > 1) {
                         item.quantity -= 1
-                        return true // เก็บไว้ในตะกร้า
+                        return true
                     } else {
-                        return false // ลบออกจากตะกร้า
+                        return false
                     }
                 }
-                return true // เก็บไว้ในตะกร้า
+                return true
             })
+
+            // Save cart to localStorage
             localStorage.setItem('carts', JSON.stringify(this.cart))
             console.log('Updated cart:', localStorage.getItem('carts'))
         },
 
         removeAllById(id) {
-            this.cart = this.cart.filter((item) => item.food.id !== id)
+            this.cart = this.cart.filter((item) => !(item.id === id))
 
+            // Save cart to localStorage
             localStorage.setItem('carts', JSON.stringify(this.cart))
-
             console.log('Updated cart after removing all by ID:', this.cart)
         },
 
-        getCartItemCount(foodId) {
-            const itemInCart = this.cart.find((item) => item.food.id === foodId)
+        getCartItemCount(id, type = 'food') {
+            const itemInCart = this.cart.find(
+                (item) => item.type === type && item.id === id
+            )
             return itemInCart ? itemInCart.quantity : 0
+        },
+
+        // Helper function to get cart items filtered by type (food or promotion)
+        getItemsByType(type) {
+            return this.cart.filter((item) => item.type === type)
         },
     },
 })

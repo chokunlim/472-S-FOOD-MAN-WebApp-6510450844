@@ -5,12 +5,14 @@ import ku.cs.restaurant.dto.user.SignupResponse;
 import ku.cs.restaurant.entity.User;
 import ku.cs.restaurant.repository.UserRepository;
 import ku.cs.restaurant.dto.ApiResponse;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -24,10 +26,18 @@ public class UserService {
 
     public ApiResponse<SignupResponse> createUser(SignupRequest user) {
         SignupResponse signupResponse = new SignupResponse();
+
         Optional<User> existedUser = userRepository.findByUsername(user.getUsername());
+        Optional<User> existedEmail = userRepository.findByEmail(user.getEmail());
 
         if (existedUser.isPresent()) {
             signupResponse.setMessage("Username already exists");
+            return new ApiResponse<>(false, signupResponse.getMessage(), signupResponse);
+        }
+
+        // Check if a user with the given email already exists
+        if (existedEmail.isPresent()) {
+            signupResponse.setMessage("Email already exists");
             return new ApiResponse<>(false, signupResponse.getMessage(), signupResponse);
         }
 
@@ -48,6 +58,7 @@ public class UserService {
         newUser.setUsername(username);
         newUser.setPhone(phone);
         newUser.setPassword(encodedPassword);
+        newUser.setEmail(user.getEmail());
         newUser.setRole(role);
 
         userRepository.save(newUser);
@@ -66,5 +77,12 @@ public class UserService {
 
     public Optional<User> getUserById(UUID id) {
         return userRepository.findById(id);
+    }
+
+    @PreAuthorize("permitAll()")
+    public List<String> getAllUserEmails() {
+        return userRepository.findAll().stream()
+                .map(User::getEmail)
+                .collect(Collectors.toList());
     }
 }

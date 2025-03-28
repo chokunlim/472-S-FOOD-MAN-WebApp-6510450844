@@ -48,4 +48,20 @@ public class ImageController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+    @GetMapping("/images/promotions/{filename:.+}")
+    public ResponseEntity<Resource> getPromotionImage(@PathVariable String filename) {
+        try {
+            Resource resource = resourceLoader.getResource("classpath:images/promotions/" + filename);
+            if (!resource.exists())
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+                    .body(resource);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 }

@@ -1,10 +1,10 @@
 package ku.cs.restaurant.dto.order;
 
-import ku.cs.restaurant.entity.Food;
 import lombok.Data;
+import java.util.UUID;
 
 @Data
 public class FoodOrder {
-    private Food food;
+    private UUID foodId;
     private int quantity;
 }
