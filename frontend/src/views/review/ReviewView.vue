@@ -34,6 +34,7 @@ import { useRoute } from 'vue-router';
 import reviewApi from "@/api/reviewApi.js";
 import userApi from "@/api/userApi.js";
 import Sidebar from "@/components/Sidebar.vue";
+import router from '@/router';
 
 const route = useRoute();
 const message = ref("");
@@ -70,6 +71,8 @@ const submitReview = async () => {
       message.value = "Review submitted successfully!";
       console.log(review_res);
       console.log(customer_res);
+
+      router.push("/reviewlistview");
 
   } catch (error) {
       message.value = "Error submitting review.";
