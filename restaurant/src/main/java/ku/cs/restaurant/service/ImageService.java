@@ -16,9 +16,11 @@ public class ImageService {
         String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
         validateFileName(fileName);
         Path path = Paths.get(folderPath, fileName).normalize();
+
         if (!path.startsWith(Paths.get(folderPath).normalize())) {
             throw new IllegalArgumentException("Invalid file path");
         }
+
         Files.copy(image.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
         return path.toString();
     }
