@@ -10,8 +10,6 @@ const orders = ref([])
 const role = ref('')
 const user = ref({})
 const searchQuery = ref('')
-const showRecipePopup = ref(false)
-const selectedOrder = ref(null)
 
 const fetchOrders = async () => {
     try {
@@ -57,21 +55,6 @@ const filteredOrders = computed(() => {
     })
 })
 
-const handleOrderDelivered = async (orderId) => {
-    // const order = orders.value.find((o) => o.id === orderId)
-    // if (order) {
-    //     try {
-    //         await orderApi.createOrder({ ...order, status: 'Delivered' })
-    //         order.status = 'Delivered'
-    //     } catch (error) {
-    //         console.error('Error updating order:', error)
-    //     }
-    // }
-}
-
-const handleViewDetail = (orderId) => {
-    router.push({ name: 'receipt', params: { id: orderId } })
-}
 </script>
 
 <template>
@@ -94,8 +77,6 @@ const handleViewDetail = (orderId) => {
                     :index="i + 1"
                     :key="order.id"
                     :order="order"
-                    @mark-delivered="handleOrderDelivered"
-                    @view-detail="handleViewDetail"
                 >
                 </OrderCard>
             </section>

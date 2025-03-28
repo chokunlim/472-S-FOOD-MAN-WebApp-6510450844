@@ -103,6 +103,7 @@
 			<artifactId>stripe-java</artifactId>
 			<version>21.1.0</version>
 		</dependency>
+
 		<!-- Mockito Core -->
 		<dependency>
 			<groupId>org.mockito</groupId>
@@ -118,6 +119,7 @@
 			<version>5.8.0</version>
 			<scope>test</scope>
 		</dependency>
+
 	</dependencies>
 
 	<build>
