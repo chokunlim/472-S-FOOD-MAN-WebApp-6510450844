@@ -10,8 +10,6 @@ const orders = ref([])
 const role = ref('')
 const user = ref({})
 const searchQuery = ref('')
-const showRecipePopup = ref(false)
-const selectedOrder = ref(null)
 
 const fetchOrders = async () => {
     try {

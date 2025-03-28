@@ -36,19 +36,19 @@
                 >Time: {{ order.createdAt.slice(11, 19) }}</span
             >
             <span class="py-2 pl-1">
-                <!-- <button
+                <button
                     v-if="order.status === 'DELIVERED' && role === 'ADMIN'"
                     class="inline-block w-52 px-10 py-2 mt-2 mr-10 rounded-lg"
                     style="background-color: #bcf14a; color: #000000"
                     @click="markOrderSuccess(order.id)"
                 >
                     Mark as Success
-                </button> -->
+                </button>
                 <button
-                    v-if="order.status === 'COMPLETE'"
+                    v-if="order.status !== 'PENDING' && role !== 'RIDER'"
                     class="inline-block w-70 px-10 py-2 mt-2 mr-10 rounded-lg"
                     style="background-color: #dddddd; color: #000000"
-                    @click="viewOrderDetailforCook(order.id)"
+                    @click="viewOrderDetail(order.id)"
                 >
                     View Details
                 </button>
@@ -143,13 +143,8 @@ const markOrderDelivered = async (id) => {
     }
 }
 
-
 const viewOrderDetail = () => {
     emit('view-detail', props.order.id)
-}
-
-const viewOrderDetailforCook = () => {
-    router.push({ name: 'receiptforcook', params: { id: props.order.id } })
 }
 
 const payAgain = (order) => {
