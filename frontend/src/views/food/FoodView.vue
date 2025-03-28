@@ -1,7 +1,7 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import Sidebar from '@/components/Sidebar.vue'
-import Card from '@/components/Card.vue'
+import Card from '@/components/cards/Card.vue'
 import Search from '@/components/Search.vue'
 import { foodsStore } from '@/stores/cart'
 import Cart from '@/components/Cart.vue'
@@ -31,10 +31,12 @@ const getUser = async () => {
 const addfood = () => {
     router.push('/addfood')
 }
+
 onMounted(() => {
     fetchFoods()
     getUser()
 })
+
 </script>
 
 <template>

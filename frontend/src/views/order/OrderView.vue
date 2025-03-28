@@ -1,8 +1,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import Sidebar from '@/components/Sidebar.vue'
-import Search from '@/components/Search.vue'
-import OrderCard from '@/components/OrderCard.vue'
+import OrderCard from '@/components/cards/OrderCard.vue'
 import orderApi from '@/api/orderApi'
 import userApi from '@/api/userApi'
 import router from '@/router'
@@ -66,7 +65,7 @@ const handleOrderSuccess = async (orderId) => {
     const order = orders.value.find((o) => o.id === orderId)
     if (order) {
         try {
-            await orderApi.createOrder({ ...order, status: 'Success' })
+            await orderApi.updateOrderStatus({ id: orderId, status: 'SUCCESS' })
             order.status = 'Success'
         } catch (error) {
             console.error('Error updating order:', error)
@@ -77,6 +76,7 @@ const handleOrderSuccess = async (orderId) => {
 const handleViewDetail = (orderId) => {
     router.push({ name: 'receipt', params: { id: orderId } })
 }
+
 </script>
 
 <template>

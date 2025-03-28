@@ -3,28 +3,6 @@ import orderApi from '@/api/orderApi'
 import Sidebar from '@/components/Sidebar.vue'
 import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-
-const route = useRoute()
-
-onMounted(async () => {
-    const orderId = route.query.id
-    if (orderId) {
-        try {
-            const { data: res } = await orderApi.updateOrderStatus({
-                id: orderId,
-                status: 'COMPLETE',
-            })
-            console.log('Order status updated:', res.data)
-        } catch (error) {
-            console.error(
-                'Failed to update order status:',
-                error.response ? error.response.data : error.message
-            )
-        }
-    } else {
-        console.error('Order ID not found in the URL')
-    }
-})
 </script>
 
 <template>

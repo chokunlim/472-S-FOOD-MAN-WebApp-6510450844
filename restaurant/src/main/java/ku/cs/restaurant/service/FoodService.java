@@ -5,7 +5,7 @@ import ku.cs.restaurant.dto.food.FoodsResponse;
 import ku.cs.restaurant.entity.Food;
 import ku.cs.restaurant.entity.Ingredient;
 import ku.cs.restaurant.entity.Recipe;
-import ku.cs.restaurant.entity.Status;
+import ku.cs.restaurant.common.Status;
 import ku.cs.restaurant.repository.FoodRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class FoodService {
+public class    FoodService {
     private final FoodRepository foodRepository;
     private final IngredientService ingredientService;
 

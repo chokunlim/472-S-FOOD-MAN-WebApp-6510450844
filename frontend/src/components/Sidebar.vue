@@ -5,7 +5,7 @@
         <div class="flex flex-col gap-12">
             <div class="flex items-center">
                 <img src="../assets/food-icon.png" width="42px" />
-                <router-link to="/food">
+                <router-link to="/promotions">
                     <span class="flex font-bold text-lg"
                         >&nbsp;SuperDuperPOS</span
                     >
@@ -18,15 +18,15 @@
                     :class="[
                         'list',
                         selectedItem === index || $route.path === item.path
-                            ? 'bg-yellow-300 flex justify-center'
-                            : 'flex-start',
+                            ? 'bg-yellow-300 flex justify-center rounded-md shadow-md'
+                            : 'flex-start hover:bg-yellow-100 duration-300 rounded-md',
                     ]"
                     @click="selectItem(index)"
                 >
                     <router-link
                         :to="item.path"
                         class="flex items-center w-full rounded-md px-2"
-                        exact-active-class="bg-yellow-300"
+                        exact-active-class="bg-yellow-300 rounded-md"
                     >
                         <div class="w-12">
                             <fa :icon="item.icon" />
@@ -59,19 +59,69 @@ const selectedItem = ref(null)
 onMounted(async () => {
     const { data: res } = await userApi.getUserByJwt()
     role.value = res.data.role
+    //console.log('', res.data)
 })
 
 const menuItems = [
-    { label: 'Menu', icon: 'bars', path: '/food' },
-    { label: 'Order', icon: 'book', path: '/order' },
-    { label: 'Ingredient', icon: 'book', path: '/ingredient', role: 'ADMIN' },
-    { label: 'Review', icon: 'book', path: '/reviewlistview', role: 'ADMIN' },
-    { label: 'Dashboard', icon: 'chart-line', path: '/dashboard', role: 'ADMIN' },
+
+    {   
+        label: 'Promotions', 
+        icon:'bullhorn', 
+        path: '/promotions' ,
+        role: ['ADMIN', 'CUSTOMER']
+    },
+    {    
+        label: 'Review', 
+        icon: 'book', 
+        path: '/reviewlistview', 
+        role: ['ADMIN', 'CUSTOMER']
+    },
+    {
+        label: 'Menu',
+        icon: 'bars',
+        path: '/food',
+        role: ['ADMIN', 'CUSTOMER'],
+    },
+    {
+        label: 'Order',
+        icon: 'book',
+        path: '/order',
+        role: ['ADMIN', 'CUSTOMER'],
+    },
+    {
+        label: 'To Deliver',
+        icon: 'book',
+        path: '/orderforrider',
+        role: ['RIDER'],
+    },
+    {
+        label: 'History',
+        icon: 'book',
+        path: '/orderhistory',
+        role: ['RIDER'],
+    },
+    {
+        label: 'Ingredient',
+        icon: 'book',
+        path: '/ingredient',
+        role: ['ADMIN'],
+    },
+    {
+        label: 'Dashboard',
+        icon: 'chart-line',
+        path: '/dashboard',
+        role: ['ADMIN'],
+    },
+
 ]
 
-// Filter menu items based on the user's role
+// user มองเห็น tab sidebar ได้ตาม role ที่กำหนด
 const filteredMenuItems = computed(() => {
-    return menuItems.filter((item) => !item.role || item.role === role.value)
+    if (!role.value) return []
+    console.log(role.value)
+    return menuItems.filter((item) =>
+        item.role.includes(role.value.toUpperCase())
+    )
 })
 
 const selectItem = (index) => {
@@ -84,13 +134,3 @@ const logout = () => {
     router.push('/signin')
 }
 </script>
-
-<style scoped>
-.list {
-    @apply flex justify-start items-center cursor-pointer rounded-md duration-200;
-}
-
-.list:hover {
-    @apply bg-yellow-300 shadow-md;
-}
-</style>

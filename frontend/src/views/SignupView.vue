@@ -35,6 +35,14 @@
                     class="input"
                     required
                 />
+                <!-- Added email input field -->
+                <input
+                    v-model="email"
+                    type="email"
+                    placeholder="Email"
+                    class="input"
+                    required
+                />
                 <input
                     v-model="phoneNumber"
                     type="text"
@@ -61,6 +69,7 @@ const router = useRouter()
 const username = ref('')
 const password = ref('')
 const confirmPassword = ref('')
+const email = ref('') // Added email ref
 const phoneNumber = ref('')
 const errorMessage = ref('')
 
@@ -77,6 +86,7 @@ const register = async () => {
             username: username.value,
             password: password.value,
             confirmPassword: confirmPassword.value,
+            email: email.value, // Included email in the API call
             phone: phoneNumber.value,
         })
 
@@ -92,3 +102,28 @@ const register = async () => {
     }
 }
 </script>
+
+<style scoped>
+.input {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.auth-button {
+    padding: 8px 16px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.auth-button:hover {
+    background-color: #45a049;
+}
+</style>

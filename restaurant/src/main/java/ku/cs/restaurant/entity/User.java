@@ -30,4 +30,7 @@ public class User {
 
     @Column(name = "user_role")
     private String role;
+
+    @Column(name = "email")
+    private String email;
 }
