@@ -55,7 +55,7 @@ public class PromotionController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<Promotion>>> getAllPromotions() {
-        List<Promotion> promotions = promotionService.getAllPromotions();
+        List<Promotion> promotions = promotionService.getActivePromotions();  // ดึงข้อมูลเฉพาะโปรโมชั่นที่ยังไม่หมดอายุ
 
         // ✅ อัปเดตพาธรูปภาพให้เป็น URL ที่เข้าถึงได้
         promotions.forEach(promo -> {
@@ -66,7 +66,7 @@ public class PromotionController {
             }
         });
 
-        return ResponseEntity.ok(new ApiResponse<>(true, "Fetched all promotions.", promotions));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Fetched active promotions.", promotions));
     }
 
     @GetMapping("/{id}")
@@ -84,6 +84,7 @@ public class PromotionController {
 
             List<Food> foods = promotionFoodService.getFoodsByPromotion(id);
 
+            // ส่งข้อมูลที่เป็น Map ซึ่งจะมีทั้งข้อมูลโปรโมชั่นและรายการอาหาร
             Map<String, Object> responseData = Map.of(
                     "promotion", promotion,
                     "foods", foods
@@ -97,6 +98,7 @@ public class PromotionController {
     }
 
 
+
     // ✅ ลบโปรโมชั่น (พร้อมลบรูปภาพ)
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deletePromotion(@PathVariable UUID id) {
@@ -108,4 +110,31 @@ public class PromotionController {
                     .body(new ApiResponse<>(false, "Promotion not found.", null));
         }
     }
+    // ✅ แก้ไขโปรโมชั่น
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity<ApiResponse<Promotion>> updatePromotion(@PathVariable UUID id,
+                                                                  @RequestPart("promotion") PromotionCreateRequest request,
+                                                                  @RequestPart(value = "image", required = false) MultipartFile image) {
+        try {
+            String imagePath = null;
+            if (image != null && !image.isEmpty()) {
+                imagePath = imageService.saveImage("src/main/resources/images/promotions", image);
+            }
+
+            // เรียกใช้ฟังก์ชัน updatePromotion ใน PromotionService
+            Promotion updatedPromotion = promotionService.updatePromotion(id, request, imagePath);
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ApiResponse<>(true, "Promotion updated successfully.", updatedPromotion));
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(false, "Failed to save image: " + e.getMessage(), null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse<>(false, "An error occurred: " + e.getMessage(), null));
+        }
+    }
+
+
 }

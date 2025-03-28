@@ -11,9 +11,11 @@ import org.springframework.stereotype.Service;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -65,6 +67,7 @@ public class PromotionService {
         if (promotionOpt.isPresent()) {
             Promotion promotion = promotionOpt.get();
 
+            // ลบไฟล์ภาพ (ถ้ามี)
             if (promotion.getImagePath() != null) {
                 try {
                     Files.deleteIfExists(Paths.get(promotion.getImagePath()));
@@ -74,10 +77,44 @@ public class PromotionService {
                 }
             }
 
+            // ลบข้อมูลโปรโมชั่นจากฐานข้อมูล
             promotionRepository.deleteById(id);
+            return true;  // ลบสำเร็จ
         } else {
             logger.warn("Promotion ID {} not found, skipping deletion.", id);
+            return false;  // ไม่พบโปรโมชั่น
         }
-        return false;
     }
+    public Promotion updatePromotion(UUID id, PromotionCreateRequest request, String imagePath) {
+        Optional<Promotion> promotionOpt = promotionRepository.findById(id);
+        if (promotionOpt.isPresent()) {
+            Promotion promotion = promotionOpt.get();
+            promotion.setName(request.getName());
+            promotion.setDescription(request.getDescription());
+            promotion.setPrice(request.getPrice());
+            promotion.setStartDate(request.getStartDate());
+            promotion.setEndDate(request.getEndDate());
+
+            // อัปเดตพาธรูปภาพ ถ้ามี
+            if (imagePath != null) {
+                promotion.setImagePath(imagePath);
+            }
+
+            return promotionRepository.save(promotion);
+        } else {
+            throw new IllegalArgumentException("Promotion not found with id: " + id);
+        }
+    }
+    public List<Promotion> getActivePromotions() {
+        // ใช้วันที่ปัจจุบันในการกรองโปรโมชั่นที่ยังไม่หมดอายุ
+        return promotionRepository.findAll().stream()
+                .filter(promotion -> promotion.getEndDate().isAfter(LocalDate.now()))
+                .collect(Collectors.toList());
+    }
+    public Promotion getPromotionDetails(UUID promoId) {
+        // ค้นหาข้อมูลโปรโมชั่นจากฐานข้อมูลโดยใช้ promoId
+        return promotionRepository.findById(promoId)
+                .orElse(null);  // ถ้าไม่พบโปรโมชั่นให้คืนค่า null
+    }
+
 }
