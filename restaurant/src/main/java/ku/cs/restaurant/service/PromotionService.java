@@ -106,11 +106,16 @@ public class PromotionService {
         }
     }
     public List<Promotion> getActivePromotions() {
-        // ใช้วันที่ปัจจุบันในการกรองโปรโมชั่นที่ยังไม่หมดอายุ
+        LocalDate today = LocalDate.now();
+
+        // เลือกเฉพาะโปรโมชั่นที่วันที่หมดอายุไม่ใช่ในอดีต
         return promotionRepository.findAll().stream()
-                .filter(promotion -> promotion.getEndDate().isAfter(LocalDate.now()))
+                .filter(promotion -> promotion.getEndDate() == null || !promotion.getEndDate().isBefore(today))
                 .collect(Collectors.toList());
     }
+
+
+
     public Promotion getPromotionDetails(UUID promoId) {
         // ค้นหาข้อมูลโปรโมชั่นจากฐานข้อมูลโดยใช้ promoId
         return promotionRepository.findById(promoId)

@@ -16,14 +16,16 @@ type Promotion = {
     foodIds: string[]
 }
 
-const form = reactive<Promotion>({
+const form = reactive<Promotion>( {
     name: '',
     description: '',
     price: 0.0,
-    startDate: '2025-02-01',
-    endDate: '2025-02-28',
+    startDate: new Date().toISOString().split('T')[0], // วันที่ปัจจุบันในรูปแบบ YYYY-MM-DD
+    endDate: new Date().toISOString().split('T')[0], // วันที่ปัจจุบันในรูปแบบ YYYY-MM-DD
     foodIds: [],
 })
+
+const isSubmitting = ref(false) // เพิ่มตัวแปร isSubmitting เพื่อเช็คสถานะการทำงาน
 
 async function getFoods() {
     try {
@@ -50,12 +52,16 @@ function handleImageUpload(event: Event) {
 }
 
 const createPromotion = async () => {
+    if (isSubmitting.value) return // หากกำลังส่งข้อมูลอยู่ให้หยุดการทำงาน
+
     if (!imageFile.value) {
         alert('Please upload an image.')
         return
     }
 
     try {
+        isSubmitting.value = true // กำหนดสถานะเป็นกำลังส่งข้อมูล
+
         const formData = new FormData()
         formData.append(
             'promotion',
@@ -67,18 +73,17 @@ const createPromotion = async () => {
 
         await promotionApi.createPromotion(formData)
         alert('Promotion added successfully!')
+        router.push('/promotions')
     } catch (error) {
         console.error('Error adding foods:', error.response?.data)
-        alert(
-            `Successfully added promotion`
-        )
+    } finally {
+        isSubmitting.value = false // เปลี่ยนสถานะกลับหลังจากส่งข้อมูลเสร็จ
     }
 }
 
 onMounted(() => {
     getFoods()
 })
-
 </script>
 
 <template>
@@ -107,7 +112,6 @@ onMounted(() => {
                     required
                     class="p-2 border rounded"
                 />
-
                 <input
                     v-model.number="form.price"
                     type="number"
@@ -154,13 +158,18 @@ onMounted(() => {
                         />
                         <span>{{ food.name }} ({{ food.price }}$)</span>
                     </div>
-                    <p>Selected Food IDs: {{ Array.from(form.foodIds) }}</p>
                 </div>
                 <div v-else>
                     <p>Loading ingredients...</p>
                 </div>
 
-                <button type="submit" class="mt-4">Create Promotion</button>
+                <button
+                    type="submit"
+                    class="mt-4"
+                    :disabled="isSubmitting" 
+                >
+                    Create Promotion
+                </button>
             </form>
         </main>
     </div>
@@ -189,5 +198,10 @@ button {
 
 button:hover {
     background-color: #45a049;
+}
+
+button:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
 }
 </style>

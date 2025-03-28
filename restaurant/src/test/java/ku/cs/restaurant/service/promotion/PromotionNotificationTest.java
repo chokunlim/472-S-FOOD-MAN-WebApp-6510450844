@@ -1,4 +1,4 @@
-package service.promotion;
+package ku.cs.restaurant.service.promotion;
 
 import ku.cs.restaurant.entity.Promotion;
 import ku.cs.restaurant.dto.promotion.PromotionCreateRequest;

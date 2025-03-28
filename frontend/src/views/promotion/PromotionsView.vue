@@ -15,20 +15,24 @@ const promotions = ref([])
 // Fetch all promotions
 const fetchPromotions = async () => {
     try {
-        const { data: res } = await promotionApi.getAllPromotions()
-        promotions.value = res.data
+        const { data: res } = await promotionApi.getAllPromotions();
+        console.log("📢 API Response:", res); // ดูโครงสร้างของ res
+        promotions.value = res.data || []; // ป้องกันกรณี res.data เป็น undefined
+        console.log("✅ Promotions:", promotions.value);
     } catch (error) {
-        console.error('Failed to fetch promotions:', error)
+        console.error("❌ Failed to fetch promotions:", error);
     }
-}
+};
 
 // Filter promotions based on the search query
 const filteredPromotions = computed(() => {
-    if (!searchQuery.value) return promotions.value
+    console.log("🔍 Filtered Promotions:", promotions.value);
+    if (!searchQuery.value) return promotions.value;
     return promotions.value.filter((promotion) =>
         promotion.name.toLowerCase().includes(searchQuery.value.toLowerCase())
-    )
-})
+    );
+});
+
 
 // Get user details and role
 const getUser = async () => {
@@ -49,7 +53,9 @@ const addPromotion = () => {
 onMounted(() => {
     fetchPromotions()
     getUser()
+    console.log("Promotions Data:", promotions.value);
 })
+
 </script>
 
 <template>

@@ -19,18 +19,18 @@ const routes = [
     {
         path: '/food',
         name: 'food',
-        component: () => import('@/views/FoodView.vue'),
+        component: () => import('@/views/food/FoodView.vue'),
     },
     {
         path: '/addfood',
         name: 'addfood',
-        component: () => import('@/views/AddFoodView.vue'),
+        component: () => import('@/views/food/AddFoodView.vue'),
     },
 
     {
         path: '/receipt/:id',
         name: 'receipt',
-        component: () => import('@/views/ReceiptView.vue'),
+        component: () => import('@/views/receipt/ReceiptView.vue'),
     },
     {
         path: '/dashboard',
@@ -47,65 +47,65 @@ const routes = [
     {
         path: '/ingredient',
         name: 'ingredient',
-        component: () => import('@/views/IngredientView.vue'),
+        component: () => import('@/views/ingredient/IngredientView.vue'),
     },
     {
         path: '/addingredients',
         name: 'addingredients',
-        component: () => import('@/views/AddIngredientsView.vue'),
+        component: () => import('@/views/ingredient/AddIngredientsView.vue'),
     },
 
     // Review
     {
         path: '/order/:id/review',
         name: 'ReviewView',
-        component: () => import('@/views/ReviewView.vue'),
+        component: () => import('@/views/review/ReviewView.vue'),
     },
     {
         path: '/reviewlistview',
         name: 'ReviewListView',
-        component: () => import('@/views/ReviewListView.vue'),
+        component: () => import('@/views/review/ReviewListView.vue'),
     },
 
     // Promotions
     {
         path: '/promotions',
         name: 'promotions',
-        component: () => import('@/views/PromotionsView.vue'),
+        component: () => import('@/views/promotion/PromotionsView.vue'),
     },
     {
         path: '/addpromotion',
         name: 'addpromotion',
-        component: () => import('@/views/AddPromotion.vue'),
+        component: () => import('@/views/promotion/AddPromotion.vue'),
     },
 
      // Payment
      {
         path: '/payment/success',
         name: 'success',
-        component: () => import('@/views/SuccessView.vue'),
+        component: () => import('@/views/receipt/SuccessView.vue'),
     },
     {
         path: '/payment/fail',
         name: 'fail',
-        component: () => import('@/views/CancelView.vue'),
+        component: () => import('@/views/receipt/CancelView.vue'),
     },
     
     // Order
     {
         path: '/order',
         name: 'order',
-        component: () => import('@/views/orders/OrderView.vue'),
+        component: () => import('@/views/order/OrderView.vue'),
     },
     {
         path: '/orderforrider',
         name: 'orderforrider',
-        component: () => import('@/views/orders/OrderRiderView.vue'),
+        component: () => import('@/views/order/OrderRiderView.vue'),
     },
     {
         path: '/orderhistory',
         name: 'orderhistory',
-        component: () => import('@/views/orders/OrderHistoryView.vue'),
+        component: () => import('@/views/order/OrderHistoryView.vue'),
     },
 
 ]
