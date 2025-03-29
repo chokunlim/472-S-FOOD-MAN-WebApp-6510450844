@@ -71,25 +71,31 @@ jobs:
           npm install
           npm run build
 
-      - name: Start Backend
-        run: |
-          cd restaurant
-          mvn spring-boot:run &
-        env:
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          STRIPE_TEST_KEY: ${{ secrets.STRIPE_TEST_KEY }}
-          SPRING_MAIL_USERNAME: ${{ secrets.SPRING_MAIL_USERNAME }}
-          SPRING_MAIL_PASSWORD: ${{ secrets.SPRING_MAIL_PASSWORD }}
-
+          - name: Start Backend
+          run: |
+            cd restaurant
+            mvn spring-boot:run &> backend.log &
+          env:
+            JWT_SECRET: ${{ secrets.JWT_SECRET }}
+            STRIPE_TEST_KEY: ${{ secrets.STRIPE_TEST_KEY }}
+            SPRING_MAIL_USERNAME: ${{ secrets.SPRING_MAIL_USERNAME }}
+            SPRING_MAIL_PASSWORD: ${{ secrets.SPRING_MAIL_PASSWORD }}
+        
+      - name: Show Backend Logs
+        run: cat backend.log
+        
       - name: Start Frontend
         run: |
           cd frontend
           npm run dev &
       
-      - name: Wait for Services to be Ready
+      - name: Wait for Backend to be Ready
         run: |
-          timeout 60s bash -c 'until curl -s http://localhost:8088/actuator/health | grep "UP"; do sleep 20; done'
-          timeout 60s bash -c 'until curl -s http://localhost:5173 | grep "<title>"; do sleep 20; done'
+          timeout 120s bash -c 'until curl -s http://localhost:8088/actuator/health | grep "UP"; do sleep 10; done || { echo "Backend did not start"; exit 1; }'
+      
+      - name: Wait for Frontend to be Ready
+        run: |
+          timeout 120s bash -c 'until curl -s http://localhost:5173 | grep "<title>"; do sleep 10; done || { echo "Frontend did not start"; exit 1; }'
 
       - name: Run Playwright Tests
         run: |
