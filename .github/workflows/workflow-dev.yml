@@ -5,6 +5,7 @@ on:
     branches:
       - develop
       - test/ci
+      - v1
   pull_request:
     branches:
       - develop
