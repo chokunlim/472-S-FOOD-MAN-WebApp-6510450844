@@ -55,13 +55,12 @@ jobs:
       - name: Start Backend
         run: |
           cd restaurant
-          nohup mvn spring-boot:run > backend.log 2>&1 &  # ✅ รัน Backend แบบ Background
+          nohup mvn spring-boot:run > backend.log 2>&1 &  
           sleep 20 
           curl --retry 10 --retry-delay 5 --retry-all-errors -I http://localhost:8088 || (echo "Backend failed to start" && exit 1)
 
   build_and_test_frontend:
     runs-on: ubuntu-latest
-    needs: test_and_build_backend 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -83,6 +82,19 @@ jobs:
           cd frontend
           npx playwright install --with-deps
 
+      - name: Start Backend
+        run: |
+          cd restaurant
+          nohup mvn spring-boot:run > backend.log 2>&1 &
+          sleep 20
+          curl --retry 10 --retry-delay 5 --retry-all-errors -I http://localhost:8088 || (echo "Backend failed to start" && exit 1)
+
+      - name: Start Frontend
+        run: |
+          cd frontend
+          nohup npm run dev -- --host > frontend.log 2>&1 &
+          sleep 10
+
       - name: Run Playwright Tests
         run: |
           cd frontend
@@ -92,3 +104,4 @@ jobs:
         run: |
           cd frontend
           npm run build
+    
