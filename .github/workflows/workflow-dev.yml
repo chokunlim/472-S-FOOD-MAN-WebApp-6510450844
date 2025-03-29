@@ -55,13 +55,17 @@ jobs:
       - name: Start Backend
         run: |
           cd restaurant
-          nohup mvn spring-boot:run > backend.log 2>&1 &  
-          sleep 20 
-          curl --retry 10 --retry-delay 5 --retry-all-errors -I http://localhost:8088 || (echo "Backend failed to start" && exit 1)
+          nohup mvn spring-boot:run > backend.log 2>&1 &
+          echo "Waiting for backend to start..."
+          for i in {1..30}; do
+            curl --silent --head --fail http://localhost:8088/api/health && break
+            echo "Waiting for backend..."
+            sleep 2
+          done || (echo "Backend failed to start" && exit 1)
 
   test_and_build_frontend:
     runs-on: ubuntu-latest
-    needs: test_and_build_backend 
+    needs: test_and_build_backend
     services:
       mysql:
         image: mysql:8
@@ -107,8 +111,25 @@ jobs:
         run: |
           cd restaurant
           nohup mvn spring-boot:run -Dspring-boot.run.profiles=ci > backend.log 2>&1 &
-          sleep 20
-          curl --retry 10 --retry-delay 5 --retry-all-errors -I http://localhost:8088 || (echo "Backend failed to start" && exit 1)
+          echo "Waiting for backend to start..."
+          for i in {1..30}; do
+            curl --silent --head --fail http://localhost:8088/api/health && break
+            echo "Waiting for backend..."
+            sleep 2
+          done || (echo "Backend failed to start" && exit 1)
+
+      - name: Start Frontend
+        working-directory: frontend
+        run: |
+          nohup npm run dev -- --port 5173 > frontend.log 2>&1 &
+          echo "Waiting for frontend to start..."
+          for i in {1..30}; do
+            curl --silent --head --fail http://localhost:5173 && break
+            echo "Waiting for frontend..."
+            sleep 2
+          done || (echo "Frontend failed to start" && exit 1)
+        env:
+          VITE_API_URL: http://localhost:8088
 
       - name: Run Playwright Tests
         working-directory: frontend
