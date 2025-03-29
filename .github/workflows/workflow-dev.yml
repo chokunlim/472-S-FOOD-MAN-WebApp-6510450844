@@ -16,7 +16,7 @@ jobs:
         image: mysql:8
         env:
           MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: test_db
+          MYSQL_DATABASE: sa2
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping -h 127.0.0.1 --silent"
@@ -59,58 +59,59 @@ jobs:
           sleep 20 
           curl --retry 10 --retry-delay 5 --retry-all-errors -I http://localhost:8088 || (echo "Backend failed to start" && exit 1)
 
-  build_and_test_frontend:
+  test_and_build_frontend:
     runs-on: ubuntu-latest
+    needs: test_and_build_backend 
+    services:
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: sa2
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping -h 127.0.0.1 --silent"
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Set up Node.js 18
         uses: actions/setup-node@v3
         with:
-          node-version: 20
-          cache: "npm"
-          cache-dependency-path: frontend/package-lock.json
+          node-version: 18
 
-      - name: Install Dependencies
-        run: |
-          cd frontend
-          npm install
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            frontend/node_modules
+            frontend/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
-      - name: Install Playwright Browsers
-        run: |
-          cd frontend
-          npx playwright install --with-deps
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
 
-      - name: Wait for MySQL to be ready
-        run: |
-          until mysqladmin ping -h 127.0.0.1 -uroot -proot --silent; do
-            echo "Waiting for MySQL..."
-            sleep 5
-          done
+      - name: Build frontend
+        working-directory: frontend
+        run: npm run build
 
-      - name: Start Backend
+      - name: Install Playwright
+        working-directory: frontend
+        run: npx playwright install --with-deps
+
+      - name: Start Backend for Frontend Tests
         run: |
           cd restaurant
-          nohup mvn spring-boot:run > backend.log 2>&1 &  
-          sleep 40  # Increase wait time
-
-      - name: Verify Backend Startup
-        run: |
-          curl --retry 15 --retry-delay 5 --retry-all-errors -I http://localhost:8088 || (echo "Backend failed to start" && cat restaurant/backend.log && exit 1)
-
-      - name: Start Frontend
-        run: |
-          cd frontend
-          nohup npm run dev -- --host > frontend.log 2>&1 &  
-          sleep 10  
+          nohup mvn spring-boot:run -Dspring-boot.run.profiles=ci > backend.log 2>&1 &
+          sleep 20
+          curl --retry 10 --retry-delay 5 --retry-all-errors -I http://localhost:8088 || (echo "Backend failed to start" && exit 1)
 
       - name: Run Playwright Tests
-        run: |
-          cd frontend
-          npx playwright test
-
-      - name: Build Vue.js Frontend
-        run: |
-          cd frontend
-          npm run build
+        working-directory: frontend
+        run: npx playwright test
+        env:
+          API_BASE_URL: http://localhost:8088/api
