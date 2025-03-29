@@ -30,7 +30,6 @@ jobs:
         run: |
           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $GITHUB_ENV
           echo "STRIPE_TEST_KEY=${{ secrets.STRIPE_TEST_KEY }}" >> $GITHUB_ENV
-          echo "SPRING_EMAIL_SENDER_HOST=${{ secrets.SPRING_EMAIL_SENDER_HOST }}" >> $GITHUB_ENV
           echo "SPRING_MAIL_USERNAME=${{ secrets.SPRING_MAIL_USERNAME }}" >> $GITHUB_ENV
           echo "SPRING_MAIL_PASSWORD=${{ secrets.SPRING_MAIL_PASSWORD }}" >> $GITHUB_ENV
 
