@@ -1,0 +1,47 @@
+import { createHotContext as __vite__createHotContext } from "/@vite/client";import.meta.hot = __vite__createHotContext("/src/App.vue");/* Injection by vite-plugin-vue-inspector Start */
+import { createBlock as __createBlock } from "/node_modules/.vite/deps/vue.js?v=9f1ec16b"
+function _interopVNode(vnode) {
+  if (vnode && vnode.props && 'data-v-inspector' in vnode.props) {
+    const data = vnode.props['data-v-inspector']
+    delete vnode.props['data-v-inspector']
+    Object.defineProperty(vnode.props, '__v_inspector', { value: data, enumerable: false })
+  }
+  return vnode
+}
+function _createBlock(...args) { return _interopVNode(__createBlock(...args)) }
+/* Injection by vite-plugin-vue-inspector End */
+import { RouterView } from "/node_modules/.vite/deps/vue-router.js?v=35386727"
+
+const _sfc_main = {
+  __name: 'App',
+  setup(__props, { expose: __expose }) {
+  __expose();
+
+
+const __returned__ = { get RouterView() { return RouterView } }
+Object.defineProperty(__returned__, '__isScriptSetup', { enumerable: false, value: true })
+return __returned__
+}
+
+}
+import { openBlock as _openBlock,  } from "/node_modules/.vite/deps/vue.js?v=9f1ec16b"
+
+function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+  return (_openBlock(), _createBlock($setup["RouterView"], { "data-v-inspector": "src/App.vue:6:5" }))
+}
+
+
+_sfc_main.__hmrId = "7a7a37b1"
+typeof __VUE_HMR_RUNTIME__ !== 'undefined' && __VUE_HMR_RUNTIME__.createRecord(_sfc_main.__hmrId, _sfc_main)
+import.meta.hot.accept(mod => {
+  if (!mod) return
+  const { default: updated, _rerender_only } = mod
+  if (_rerender_only) {
+    __VUE_HMR_RUNTIME__.rerender(updated.__hmrId, updated.render)
+  } else {
+    __VUE_HMR_RUNTIME__.reload(updated.__hmrId, updated)
+  }
+})
+import _export_sfc from "/@id/__x00__plugin-vue:export-helper"
+export default /*#__PURE__*/_export_sfc(_sfc_main, [['render',_sfc_render],['__file',"C:/Users/qupur/OneDrive/Desktop/472-S-FOOD-MAN-WebApp-6510450844/frontend/src/App.vue"]])
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7O0FBQ0EsTUFBTSxDQUFDLENBQUMsQ0FBQyxVQUFVLENBQUMsQ0FBQyxDQUFDLElBQUksQ0FBQyxDQUFDLEdBQUcsQ0FBQyxNQUFNLENBQUMsQ0FBQzs7Ozs7O0FBRDFCLENBQUM7Ozs7Ozs7Ozs7O3dCQUtYLGFBQWlELHdCQUFyQyxrQkFBZ0IsRUFBQyxpQkFBaUIiLCJuYW1lcyI6W10sImlnbm9yZUxpc3QiOltdLCJzb3VyY2VzIjpbIkFwcC52dWUiXSwic291cmNlc0NvbnRlbnQiOlsiPHNjcmlwdCBzZXR1cD5cclxuaW1wb3J0IHsgUm91dGVyVmlldyB9IGZyb20gJ3Z1ZS1yb3V0ZXInXHJcbjwvc2NyaXB0PlxyXG5cclxuPHRlbXBsYXRlPlxyXG4gICAgPFJvdXRlclZpZXcgZGF0YS12LWluc3BlY3Rvcj1cInNyYy9BcHAudnVlOjY6NVwiIC8+XHJcbjwvdGVtcGxhdGU+XHJcbiJdLCJmaWxlIjoiQzovVXNlcnMvcXVwdXIvT25lRHJpdmUvRGVza3RvcC80NzItUy1GT09ELU1BTi1XZWJBcHAtNjUxMDQ1MDg0NC9mcm9udGVuZC9zcmMvQXBwLnZ1ZSJ9
