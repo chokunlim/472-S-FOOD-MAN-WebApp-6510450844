@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - develop
-      - test/ci
-      - v1
   pull_request:
     branches:
       - develop
@@ -46,7 +44,7 @@ jobs:
 
       - name: Build Backend Dockerfile
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/spring-backend:latest -f restaurant/Dockerfile backend
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/spring-backend:latest -f restaurant/Dockerfile restaurant
 
 
   test_and_build_frontend:
