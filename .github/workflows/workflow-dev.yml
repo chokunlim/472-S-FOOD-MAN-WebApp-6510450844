@@ -82,17 +82,27 @@ jobs:
           cd frontend
           npx playwright install --with-deps
 
+      - name: Wait for MySQL to be ready
+        run: |
+          until mysqladmin ping -h 127.0.0.1 -uroot -proot --silent; do
+            echo "Waiting for MySQL..."
+            sleep 5
+          done
+
       - name: Start Backend
         run: |
           cd restaurant
           nohup mvn spring-boot:run > backend.log 2>&1 &  
-          sleep 40  
-          curl --retry 10 --retry-delay 5 --retry-all-errors -I http://localhost:8088 || (echo "Backend failed to start" && exit 1)
+          sleep 40  # Increase wait time
+
+      - name: Verify Backend Startup
+        run: |
+          curl --retry 15 --retry-delay 5 --retry-all-errors -I http://localhost:8088 || (echo "Backend failed to start" && cat restaurant/backend.log && exit 1)
 
       - name: Start Frontend
         run: |
           cd frontend
-          nohup npm run dev -- --host > frontend.log 2>&1 &
+          nohup npm run dev -- --host > frontend.log 2>&1 &  
           sleep 10  
 
       - name: Run Playwright Tests
