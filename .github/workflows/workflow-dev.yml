@@ -72,11 +72,6 @@ jobs:
           cd frontend
           npx playwright install --with-deps
 
-      - name: Start Frontend
-        run: |
-          cd frontend
-          npm run dev
-
       - name: Build Vue.js Frontend
         run: |
           cd frontend
