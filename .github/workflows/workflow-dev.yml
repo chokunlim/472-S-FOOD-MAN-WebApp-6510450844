@@ -38,7 +38,7 @@ jobs:
 
       - name: Run Unit Tests (JUnit)
         run: |
-          cd backend
+          cd restaurant
           mvn clean install -DskipTests=false
           mvn test
 
