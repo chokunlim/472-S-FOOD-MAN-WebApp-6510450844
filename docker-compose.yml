@@ -1,0 +1,47 @@
+services:
+  mysql:
+    image: mysql:latest
+    container_name: my-mysql
+    restart: always
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: sa2
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+
+  backend:
+    build:
+      context: ./restaurant 
+      dockerfile: Dockerfile
+    container_name: spring-boot-backend
+    restart: always
+    ports:
+      - "8088:8088"
+    volumes:
+      - ./restaurant:/app
+    depends_on:
+      - mysql
+    env_file:
+      - restaurant/src/main/resources/.env
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://my-mysql:3306/sa2?serverTimezone=Asia/Bangkok
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=
+
+  frontend:
+    build:
+      context: ./frontend 
+      dockerfile: Dockerfile
+    container_name: vue-frontend
+    restart: always
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    working_dir: /app
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    depends_on:
+      - backend

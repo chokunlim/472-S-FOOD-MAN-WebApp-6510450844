@@ -1,0 +1,31 @@
+{"version":7,"type":"context-options","origin":"testRunner","browserName":"","options":{},"platform":"win32","wallTime":1743280610983,"monotonicTime":623.211,"sdkLanguage":"javascript"}
+{"type":"before","callId":"hook@1","startTime":626.811,"class":"Test","method":"step","apiName":"Before Hooks","params":{},"stack":[]}
+{"type":"before","callId":"hook@2","parentId":"hook@1","startTime":627.51,"class":"Test","method":"step","apiName":"beforeEach hook","params":{},"stack":[{"file":"C:\\Users\\qupur\\OneDrive\\Desktop\\472-S-FOOD-MAN-WebApp-6510450844\\frontend\\test\\review\\SortService.test.js","line":5,"column":8}]}
+{"type":"before","callId":"fixture@3","parentId":"hook@2","startTime":633.107,"class":"Test","method":"step","apiName":"fixture: browser","params":{},"stack":[]}
+{"type":"before","callId":"pw:api@4","parentId":"fixture@3","startTime":635.041,"class":"Test","method":"step","apiName":"browserType.launch","params":{"handleSIGINT":"false","tracesDir":"C:\\Users\\qupur\\OneDrive\\Desktop\\472-S-FOOD-MAN-WebApp-6510450844\\frontend\\test-results\\.playwright-artifacts-7\\traces","headless":"true","ignoreDefaultArgs":"undefined","ignoreAllDefaultArgs":"false","env":"undefined"},"stack":[]}
+{"type":"after","callId":"pw:api@4","endTime":677.807,"annotations":[]}
+{"type":"after","callId":"fixture@3","endTime":678.027,"annotations":[]}
+{"type":"before","callId":"fixture@5","parentId":"hook@2","startTime":678.988,"class":"Test","method":"step","apiName":"fixture: context","params":{},"stack":[]}
+{"type":"before","callId":"pw:api@6","parentId":"fixture@5","startTime":680.519,"class":"Test","method":"step","apiName":"browser.newContext","params":{"acceptDownloads":"accept","bypassCSP":"false","colorScheme":"light","hasTouch":"false","ignoreHTTPSErrors":"false","isMobile":"false","javaScriptEnabled":"true","locale":"en-US","offline":"false","viewport":"Object","serviceWorkers":"allow","noDefaultViewport":"false","extraHTTPHeaders":"undefined","storageState":"undefined","recordHar":"undefined","reducedMotion":"undefined","forcedColors":"undefined","contrast":"undefined","clientCertificates":"undefined"},"stack":[]}
+{"type":"after","callId":"pw:api@6","endTime":685.423,"annotations":[]}
+{"type":"after","callId":"fixture@5","endTime":693.242,"annotations":[]}
+{"type":"before","callId":"fixture@7","parentId":"hook@2","startTime":693.692,"class":"Test","method":"step","apiName":"fixture: page","params":{},"stack":[]}
+{"type":"before","callId":"pw:api@8","parentId":"fixture@7","startTime":694.612,"class":"Test","method":"step","apiName":"browserContext.newPage","params":{},"stack":[]}
+{"type":"after","callId":"pw:api@8","endTime":729.057,"annotations":[]}
+{"type":"after","callId":"fixture@7","endTime":729.23,"annotations":[]}
+{"type":"stdout","timestamp":729.625,"text":"Mocking authentication for RIDER user...\n"}
+{"type":"before","callId":"pw:api@9","parentId":"hook@2","startTime":731.105,"class":"Test","method":"step","apiName":"page.addInitScript","params":{"source":"(token => {\n      localStorage.setItem('authToken', token);\n    })(\"header.eyJ1c2VyX2lkIjoiZjdjMDk1ZTYtM2I4Mi00ZjMyLTg0MmUtODk3Zjk4MjEwMWU5IiwiZW1haWwiOiJ0ZXN0MTIzQGV4YW1wbGUuY29tIiwicGhvbmUiOiIwOTk5OTk5OTk5IiwidXNlcl9yb2xlIjoiUklERVIiLCJ1c2VybmFtZSI6InJpZGVyIiwiZXhwIjoxNzQzMjg0MjExfQ==.signature\")"},"stack":[{"file":"C:\\Users\\qupur\\OneDrive\\Desktop\\472-S-FOOD-MAN-WebApp-6510450844\\frontend\\test\\review\\SortService.test.js","line":23,"column":5}]}
+{"type":"after","callId":"pw:api@9","endTime":734.841,"annotations":[]}
+{"type":"stdout","timestamp":734.944,"text":"Authentication mocked, setting up API responses...\n"}
+{"type":"before","callId":"pw:api@10","parentId":"hook@2","startTime":736.424,"class":"Test","method":"step","apiName":"page.route","params":{"patterns":"[Object]"},"stack":[{"file":"C:\\Users\\qupur\\OneDrive\\Desktop\\472-S-FOOD-MAN-WebApp-6510450844\\frontend\\test\\review\\SortService.test.js","line":30,"column":16}]}
+{"type":"after","callId":"pw:api@10","endTime":738.508,"annotations":[]}
+{"type":"before","callId":"pw:api@11","parentId":"hook@2","startTime":739.758,"class":"Test","method":"step","apiName":"page.route","params":{"patterns":"[Object, Object]"},"stack":[{"file":"C:\\Users\\qupur\\OneDrive\\Desktop\\472-S-FOOD-MAN-WebApp-6510450844\\frontend\\test\\review\\SortService.test.js","line":48,"column":16}]}
+{"type":"after","callId":"pw:api@11","endTime":740.866,"annotations":[]}
+{"type":"before","callId":"pw:api@12","parentId":"hook@2","startTime":741.883,"class":"Test","method":"step","apiName":"page.route","params":{"patterns":"[Object, Object, Object]"},"stack":[{"file":"C:\\Users\\qupur\\OneDrive\\Desktop\\472-S-FOOD-MAN-WebApp-6510450844\\frontend\\test\\review\\SortService.test.js","line":61,"column":16}]}
+{"type":"after","callId":"pw:api@12","endTime":742.848,"annotations":[]}
+{"type":"stdout","timestamp":742.972,"text":"Mocks ready, navigating to review page...\n"}
+{"type":"before","callId":"pw:api@13","parentId":"hook@2","startTime":744.307,"class":"Test","method":"step","apiName":"page.goto","params":{"url":"http://localhost:5173/reviewlistview","waitUntil":"load"},"stack":[{"file":"C:\\Users\\qupur\\OneDrive\\Desktop\\472-S-FOOD-MAN-WebApp-6510450844\\frontend\\test\\review\\SortService.test.js","line":74,"column":16}]}
+{"type":"after","callId":"pw:api@13","endTime":944.589,"annotations":[]}
+{"type":"after","callId":"hook@2","endTime":944.687,"annotations":[]}
+{"type":"after","callId":"hook@1","endTime":944.884,"annotations":[]}
+{"type":"before","callId":"pw:api@14","startTime":945.676,"class":"Test","method":"step","apiName":"page.click","params":{"selector":"button:has-text(\"All Review\")"},"stack":[{"file":"C:\\Users\\qupur\\OneDrive\\Desktop\\472-S-FOOD-MAN-WebApp-6510450844\\frontend\\test\\review\\SortService.test.js","line":98,"column":16}]}
