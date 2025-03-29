@@ -64,8 +64,9 @@ jobs:
       - name: Run Playwright Tests
         run: |
           cd frontend
-          npx playwright install --with-deps
-          npm run test:e2e
+          npm install --save-dev @playwright/test
+          npx playwright install
+          npx playwright test
 
       - name: Build Vue.js Frontend
         run: |
