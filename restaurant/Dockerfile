@@ -13,4 +13,4 @@ RUN ./mvnw dependency:resolve
 
 RUN ./mvnw package -DskipTests
 
-CMD ./wait-for-it.sh my-mysql:3306 -- java -jar target/restaurant-0.0.1-SNAPSHOT.jar
+CMD ./wait-for-it.sh my-mysql:3306 -- ./mvnw spring-boot:run 
